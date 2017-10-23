@@ -1,0 +1,17 @@
+
+<launch>
+<!--
+  <node pkg="slam_karto" type="slam_karto" name="slam_karto" output="screen">
+    <remap from="scan" to="scan"/>
+    <param name="odom_frame" value="odom"/>
+    <param name="map_update_interval" value="25"/>
+    <param name="resolution" value="0.025"/>
+    <param name="debug_print_flag" value="true"/>
+  </node>
+  <node pkg="rviz" type="rviz" name="rviz" />
+  <node pkg="tf" type="static_transform_publisher" name="link_to_laser" args="0 0 0 0 0 0 1 /base_link /laser 1" />
+-->
+  <node pkg="test_slam" type="talker" name="talker" output="screen"/>
+  <node pkg="test_slam" type="listener" name="listener" output="screen"/>
+
+</launch>

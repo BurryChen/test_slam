@@ -1,0 +1,90 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x12\x00t\x00e\x00s\x00t\x00_\x00s\x00l\x00a\x00m)
+
+[CMake]
+Build Directory Count=1
+Current Build Directory Index=0
+ProjectRootRelative=./
+
+[CMake][CMake Build Directory 0]
+Build Directory Path=file:///home/whu/laser_slam_openSources-master/test_slam/build
+Build Type=Debug
+CMake Binary=file:///usr/bin/cmake
+Environment Profile=
+Extra Arguments=-DCATKIN_DEVEL_PREFIX=../devel -DCMAKE_INSTALL_PREFIX=../install
+Install Directory=file:///home/whu/laser_slam_openSources-master/test_slam/install
+
+[Launch]
+Launch Configurations=Launch Configuration 0,Launch Configuration 1,Launch Configuration 2,Launch Configuration 3
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=hello
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Arguments=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=default
+Executable=file:///home/whu/laser_slam_openSources-master/test_slam/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=test_slam,hello
+Use External Terminal=false
+Working Directory=
+isExecutable=false
+
+[Launch][Launch Configuration 1]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=port
+Type=Native Application
+
+[Launch][Launch Configuration 1][Data]
+Arguments=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=default
+Executable=file:///home/whu/laser_slam_openSources-master/test_slam/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=test_slam,port
+Use External Terminal=false
+Working Directory=
+isExecutable=false
+
+[Launch][Launch Configuration 2]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=odometry
+Type=Native Application
+
+[Launch][Launch Configuration 2][Data]
+Arguments=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=default
+Executable=file:///home/whu/laser_slam_openSources-master/test_slam/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=test_slam,odometry
+Use External Terminal=false
+Working Directory=
+isExecutable=false
+
+[Launch][Launch Configuration 3]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=imuPAGS
+Type=Native Application
+
+[Launch][Launch Configuration 3][Data]
+Arguments=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=default
+Executable=file:///home/whu/laser_slam_openSources-master/test_slam/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=test_slam,imuPAGS
+Use External Terminal=false
+Working Directory=
+isExecutable=false

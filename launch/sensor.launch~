@@ -1,0 +1,45 @@
+<!-- 
+
+This launch file shows how to start a hokuyo node. 
+
+You may have to change the port parameter if your laser is not at
+/dev/ttyACM0.
+
+If you have rviz built, you can uncomment the rviz node to visualize the
+laser data.
+
+Otherwise, you can use rostopic to see the data:
+rostopic echo /scan
+
+-->
+
+<launch>
+  <node name="hokuyo0" pkg="hokuyo_node" type="hokuyo_node" >
+  
+    <!-- Set the port to connect to here -->
+    <param name="port" type="string" value="/dev/ttyACM0"/> 
+    <remap from="/scan" to="laserHoriz/scan"/>
+  </node>
+
+  <node name="hokuyo1" pkg="hokuyo_node" type="hokuyo_node" >
+  
+    <!-- Set the port to connect to here -->
+    <param name="port" type="string" value="/dev/ttyACM1"/> 
+    <remap from="/scan" to="laserVertL/scan"/>
+  </node>
+
+  <node name="hokuyo2" pkg="hokuyo_node" type="hokuyo_node" >
+  
+    <!-- Set the port to connect to here -->
+    <param name="port" type="string" value="/dev/ttyACM2"/> 
+    <remap from="/scan" to="laserVertR/scan"/>
+  </node>
+
+
+<node name="slam_test" pkg="port" type="port"> </node>
+
+
+<node pkg="rosbag" type="record" name="record" output="screen" args="-a"/> 
+
+  
+</launch>

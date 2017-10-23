@@ -1,0 +1,9 @@
+
+<launch>
+
+  <node pkg="test_slam" type="hello" name="hello" />
+<!--
+  <node pkg="tf" type="static_transform_publisher" name="link_to_laser" args="0 0 0 0 0 0 1 /base_link /laser 1" />
+-->
+
+</launch>
