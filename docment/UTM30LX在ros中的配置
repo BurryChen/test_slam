@@ -1,0 +1,69 @@
+1、主要参考：
+http://blog.csdn.net/u010811078/article/details/59483500
+http://www.ncnynl.com/archives/201611/1101.html
+http://wiki.ros.org/hokuyo_node/Tutorials/UsingTheHokuyoNode
+http://www.ncnynl.com/archives/201611/1097.html
+
+参考书籍：《ROS机器人程序设计.pdf》4.2使用激光雷达-Hokuyo URG-04lx（重点）
+http://blog.csdn.net/zkl99999/article/details/49904903
+2、注意事项
+1)激光显示
+rosrun rviz rviz -d `rospack find hokuyo_node`/hokuyo_test.vcg 存在问题，需要按如下步骤。
+Viewing the data： $ rosrun rviz rviz；
+Global Options->Fixed Frame：/laser；
+Add—>By display type,选择laserscan，By topic,选择LaserScan,确定。
+
+2)源码安装，建立工作空间，
+## turtlebot建图依赖包
+$ git clone https://github.com/turtlebot/turtlebot_apps 
+该步骤并不必要。
+3)强行关闭hokuyo_node终端，进程有时未完全关闭，影响下次节点的运行
+http://blog.csdn.net/u010811078/article/details/59483500
+解决方案:
+http://www.ros.org/wiki/hokuyo_node/Troubleshooting
+查看未关闭的进程：$ lsof | grep /dev/ttyACM0  或者 lsof /dev/ttyACM0
+根据进程号关闭进程：$ kill [PID]
+4)每次重新启动，都要查看设置激光权限，参数设置非必须。
+
+$ echo "source /home/whu/catkin_ws/devel/setup.bash" >> ~/.bashrc
+# 使环境变量设置立即生效
+$ source ~/.bashrc
+
+5)其他命令
+http://rosclub.cn/post-515.html
+查看激光雷达检测到的数据Users of the APIs must ensure no concurrent input/output operations are performed on different threads. 
+$ rostopic echo /scan
+查看激光雷达扫描的消息类型和消息结构
+$ rostopic type /scan
+$ rosmsg show sensor_msgs/LaserScan
+
+6)部分命令汇总
+
+配置
+查看端口
+$ ls -l /dev/ttyACM0
+$ ls -l /dev/ttyACM0 /dev/ttyACM1 /dev/ttyACM2
+crw-rw-XX- 1 root dialout 166, 0 2009-10-27 14:18 /dev/ttyACM0
+
+设置端口权限666
+$ sudo chmod a+rw /dev/ttyACM0 /dev/ttyACM1 /dev/ttyACM2
+
+测试
+新开终端，启动roscore
+$ roscore 
+
+新开终端，设置参数
+$ rosparam set hokuyo_node/calibrate_time false #加速启动
+$ rosparam set hokuyo_node/port /dev/ttyACM0   #设置端口
+
+ 新开终端，运行节点
+$ rosrun hokuyo_node hokuyo_node
+[ INFO] 1256687975.743438000: Connected to device with ID: H0807344
+
+更改第二个命令：
+rosrun hokuyo_node hokuyo_node __name:=hokuyo_node2
+
+新开终端，查看数据
+$ rosrun rviz rviz 
+
+

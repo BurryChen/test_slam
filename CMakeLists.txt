@@ -4,7 +4,7 @@ project(test_slam)
 ## Find catkin and any catkin packages
 find_package(catkin REQUIRED COMPONENTS 
   roscpp rospy std_msgs genmsg message_generation
-  serial
+  #serial
   sensor_msgs
   tf
   nav_msgs
@@ -52,14 +52,23 @@ Target_link_libraries(hello ${catkin_LIBRARIES}) #添加节点编译需要的库文件。
 #target_link_libraries(add_two_ints_client ${catkin_LIBRARIES})
 #add_dependencies(add_two_ints_client test_slam_gencpp)
 
-add_executable(port src/port.cpp)
-target_link_libraries(port ${catkin_LIBRARIES})
+# add_executable(port src/port.cpp)
+# target_link_libraries(port ${catkin_LIBRARIES})
+# 
+# add_executable(odometry src/odometry.cpp)
+# target_link_libraries(odometry ${catkin_LIBRARIES})
+# 
+# add_executable(imuPAGS src/imuPAGS.cpp)
+# target_link_libraries(imuPAGS ${catkin_LIBRARIES})
 
-add_executable(odometry src/odometry.cpp)
-target_link_libraries(odometry ${catkin_LIBRARIES})
+ add_subdirectory(src)
 
-add_executable(imuPAGS src/imuPAGS.cpp)
-target_link_libraries(imuPAGS ${catkin_LIBRARIES})
+
+install(TARGETS  hello
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 
 

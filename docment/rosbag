@@ -1,0 +1,173 @@
+
+http://wiki.ros.org/rosbag/Commandline#play
+1. 记录数据(创建一个bag文件)
+
+(1) 记录所有发布的topics
+$ rostopic list -v
+
+rosbag record -a
+ 
+2. 检验和回放bag文件
+
+(1) 用info命令检查bag的内容而不用回放它：
+
+$ rosbag info <your bagfile>
+显示了topic的名字和类型还有每个topic在bag文件中包含的messages数量。
+info <bag-files>
+
+    Display a summary of the contents of the bag files.
+
+    $ rosbag info session*.bag
+
+-h, --help
+
+    Show the usage and exit.
+
+    $ rosbag info -h
+
+-y, --yaml
+
+    Print information in YAML format.
+
+    $ rosbag info -y /path/to/my.bag
+
+-k KEY, --key=KEY
+
+    Print information only on the given field (requires -y).
+
+    $ rosbag info -y -k duration /path/to/my.bag
+
+whu@whu-Ubuntu:~$ rosbag info '/home/whu/data/SSRR13_bag_files/Trial1.bag'
+path:        /home/whu/data/SSRR13_bag_files/Trial1.bag
+version:     2.0
+duration:    4:31s (271s)
+start:       Jul 09 2013 16:41:29.16 (1373359289.16)
+end:         Jul 09 2013 16:46:00.44 (1373359560.44)
+size:        64.8 MB
+messages:    138494
+compression: none [85/85 chunks]
+types:       diagnostic_msgs/DiagnosticArray       [3cfbeff055e708a24c3d946a5c8139cd]
+             dynamic_reconfigure/Config            [958f16a05573709014982821e6822580]
+             dynamic_reconfigure/ConfigDescription [757ce9d44ba8ddd801bb30bc456f946f]
+             geometry_msgs/Twist                   [9f195f881246fdfa2798d1d3eebca84a]
+             nav_msgs/Odometry                     [cd5e73d190d741a2f92e81eda573aca7]
+             rosgraph_msgs/Log                     [acffd30cd6b6de30f120938c17c593fb]
+             sensor_msgs/LaserScan                 [90c7ef2dc6895d81024acba2ac42f369]
+             tf/tfMessage                          [94810edda583a504dfda3829e70d7eec]
+topics:      /cmd_vel                                 90 msgs    : geometry_msgs/Twist                  
+             /diagnostics                            271 msgs    : diagnostic_msgs/DiagnosticArray      
+             /hokuyo_node/parameter_descriptions       1 msg     : dynamic_reconfigure/ConfigDescription
+             /hokuyo_node/parameter_updates            1 msg     : dynamic_reconfigure/Config           
+             /odom                                 66176 msgs    : nav_msgs/Odometry                    
+             /rosout                                 190 msgs    : rosgraph_msgs/Log                     (3 connections)
+             /rosout_agg                             180 msgs    : rosgraph_msgs/Log                    
+             /scan                                  2703 msgs    : sensor_msgs/LaserScan                
+             /tf                                   68882 msgs    : tf/tfMessage                          (2 connections)
+
+ 
+(2) 重放bag文件，以在运行系统上产生相同的效果。
+
+在产生原始bag文件的目录中运行以下命令：
+$ rosbag play <your bagfile>
+
+http://wiki.ros.org/rosbag/Commandline#play
+play <bag-files>
+
+    Play back (publish) the contents of the given bags.
+
+    $ rosbag play recorded1.bag recorded2.bag
+
+-h, --help
+
+    Show the usage and exit.
+
+    $ rosbag play -h
+
+-q, --quiet
+
+    Suppress console output.
+
+    $ rosbag play -q recorded1.bag
+
+-i, --immediate
+
+    Play back all messages without waiting.
+
+    $ rosbag play -i recorded1.bag
+
+--pause
+
+    Start in paused mode.
+
+    $ rosbag play --pause recorded1.bag
+
+--queue=SIZE
+
+    Use an outgoing queue of size SIZE (defaults to 0. As of 1.3.3 defaults to 100).
+
+    $ rosbag play --queue=1000 recorded1.bag
+
+--clock
+
+    Publish the clock time
+
+    $ rosbag play --clock recorded1.bag
+
+--hz=HZ
+
+    Publish clock time at frequency HZ Hz (default: 100).
+
+    $ rosbag play --clock --hz=200 recorded1.bag
+
+-d SEC, --delay=SEC
+
+    Sleep SEC seconds after every advertise call (to allow subscribers to connect).
+
+    $ rosbag play -d 5 recorded1.bag
+
+-r FACTOR, --rate=FACTOR
+
+    Multiply the publish rate by FACTOR.
+
+    $ rosbag play -r 10 recorded1.bag
+
+-s SEC, --start=SEC
+
+    Start SEC seconds into the bags.
+
+    $ rosbag play -s 5 recorded1.bag
+
+-u SEC, --duration=SEC
+
+    Play only SEC seconds from the bag files.
+
+    $ rosbag play -u 240 recorded1.bag
+
+-l, --loop
+
+    Loop playback.
+
+    $ rosbag play -l recorded1.bag
+
+-k, --keep-alive
+
+    Keep alive past end of bag (useful for publishing latched topics).
+
+    $ rosbag play -k recorded1.bag
+
+Hit space to toggle paused, or 's' to step,Ctrl+C 停止回复；-l 循环播放
+等待可以用-d来特别指定。而是使用-s参数在不是bag文件开始的其他部分开始回放。
+rosbag play -r 2 <your bagfile>   通过一个特定的因子改变发布数据的速度
+
+3. 记录数据子集
+允许用户值记录它们感兴趣的topics。在bag文件目录中运行：
+$ rosbag record -O filename /turtle1/cmd_vel /turtle1/pose
+ 
+检查bag文件的内容rosbag info subset.bag）：
+
+4. rosbag record/play的局限
+在系统中，在messages被roscore记录和处理时以及使用rosplay 产生和处理messages时，rosbag复制运行系统的行为的能力是有限的。
+
+5、http://wiki.ros.org/rqt_bag
+$ rqt_bag
+

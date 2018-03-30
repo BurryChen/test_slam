@@ -1,0 +1,391 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+<meta name="google-site-verification" content="CjkdY6BqKWAVmQ78_iSq6J7ZZ9AoL7-CjFVBYGg9FU4">
+<link rel="shortcut icon" href="http://wiki.ros.org/custom/favicon.ico" type="image/ico">
+<link rel="stylesheet" href="rosbag_Commandline%20-%20ROS%20Wiki_files/bootstrap.css">
+<script type="text/javascript" src="rosbag_Commandline%20-%20ROS%20Wiki_files/4c8610d177"></script><script src="rosbag_Commandline%20-%20ROS%20Wiki_files/nr-1044.js"></script><script type="text/javascript" async="" src="rosbag_Commandline%20-%20ROS%20Wiki_files/ga.js"></script><script src="rosbag_Commandline%20-%20ROS%20Wiki_files/jquery-1.js"></script>
+<script src="rosbag_Commandline%20-%20ROS%20Wiki_files/bootstrap.js"></script>
+<script type="text/javascript" src="rosbag_Commandline%20-%20ROS%20Wiki_files/sorttable.js"></script>
+<script type="text/javascript" src="rosbag_Commandline%20-%20ROS%20Wiki_files/jquery.js"></script>                         
+<script type="text/javascript" src="rosbag_Commandline%20-%20ROS%20Wiki_files/seesaw.js"></script> 
+<script type="text/javascript" src="rosbag_Commandline%20-%20ROS%20Wiki_files/rosversion.js"></script> 
+<!--script type="text/javascript" src="/custom/libraries/RGraph.common.core.js" ></script Used for metrics only, should be conditional, not at the top-->
+<!--script type="text/javascript" src="/custom/libraries/RGraph.bar.js" ></script same as above -->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-17821189-2']);
+  _gaq.push(['_setDomainName', 'wiki.ros.org']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript">window.NREUM||(NREUM={}),__nr_require=function(e,n,t){function r(t){if(!n[t]){var o=n[t]={exports:{}};e[t][0].call(o.exports,function(n){var o=e[t][1][n];return r(o||n)},o,o.exports)}return n[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<t.length;o++)r(t[o]);return r}({1:[function(e,n,t){function r(){}function o(e,n,t){return function(){return i(e,[c.now()].concat(u(arguments)),n?null:this,t),n?void 0:this}}var i=e("handle"),a=e(2),u=e(3),f=e("ee").get("tracer"),c=e("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],d="api-",l=d+"ixn-";a(p,function(e,n){s[n]=o(d+n,!0,"api")}),s.addPageAction=o(d+"addPageAction",!0),s.setCurrentRouteName=o(d+"routeName",!0),n.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(e,n){var t={},r=this,o="function"==typeof n;return i(l+"tracer",[c.now(),e,t],r),function(){if(f.emit((o?"":"no-")+"fn-start",[c.now(),r,o],t),o)try{return n.apply(this,arguments)}finally{f.emit("fn-end",[c.now()],t)}}}};a("setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,n){m[n]=o(l+n)}),newrelic.noticeError=function(e){"string"==typeof e&&(e=new Error(e)),i("err",[e,c.now()])}},{}],2:[function(e,n,t){function r(e,n){var t=[],r="",i=0;for(r in e)o.call(e,r)&&(t[i]=n(r,e[r]),i+=1);return t}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],3:[function(e,n,t){function r(e,n,t){n||(n=0),"undefined"==typeof t&&(t=e?e.length:0);for(var r=-1,o=t-n||0,i=Array(o<0?0:o);++r<o;)i[r]=e[n+r];return i}n.exports=r},{}],4:[function(e,n,t){n.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(e,n,t){function r(){}function o(e){function n(e){return e&&e instanceof r?e:e?f(e,u,i):i()}function t(t,r,o,i){if(!d.aborted||i){e&&e(t,r,o);for(var a=n(o),u=m(t),f=u.length,c=0;c<f;c++)u[c].apply(a,r);var p=s[y[t]];return p&&p.push([b,t,r,a]),a}}function l(e,n){v[e]=m(e).concat(n)}function m(e){return v[e]||[]}function w(e){return p[e]=p[e]||o(t)}function g(e,n){c(e,function(e,t){n=n||"feature",y[t]=n,n in s||(s[n]=[])})}var v={},y={},b={on:l,emit:t,get:w,listeners:m,context:n,buffer:g,abort:a,aborted:!1};return b}function i(){return new r}function a(){(s.api||s.feature)&&(d.aborted=!0,s=d.backlog={})}var u="nr@context",f=e("gos"),c=e(2),s={},p={},d=n.exports=o();d.backlog=s},{}],gos:[function(e,n,t){function r(e,n,t){if(o.call(e,n))return e[n];var r=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,n,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return e[n]=r,r}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],handle:[function(e,n,t){function r(e,n,t,r){o.buffer([e],r),o.emit(e,n,t)}var o=e("ee").get("handle");n.exports=r,r.ee=o},{}],id:[function(e,n,t){function r(e){var n=typeof e;return!e||"object"!==n&&"function"!==n?-1:e===window?0:a(e,i,function(){return o++})}var o=1,i="nr@id",a=e("gos");n.exports=r},{}],loader:[function(e,n,t){function r(){if(!x++){var e=h.info=NREUM.info,n=d.getElementsByTagName("script")[0];if(setTimeout(s.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&n))return s.abort();c(y,function(n,t){e[n]||(e[n]=t)}),f("mark",["onload",a()+h.offset],null,"api");var t=d.createElement("script");t.src="https://"+e.agent,n.parentNode.insertBefore(t,n)}}function o(){"complete"===d.readyState&&i()}function i(){f("mark",["domContent",a()+h.offset],null,"api")}function a(){return E.exists&&performance.now?Math.round(performance.now()):(u=Math.max((new Date).getTime(),u))-h.offset}var u=(new Date).getTime(),f=e("handle"),c=e(2),s=e("ee"),p=window,d=p.document,l="addEventListener",m="attachEvent",w=p.XMLHttpRequest,g=w&&w.prototype;NREUM.o={ST:setTimeout,SI:p.setImmediate,CT:clearTimeout,XHR:w,REQ:p.Request,EV:p.Event,PR:p.Promise,MO:p.MutationObserver};var v=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1044.min.js"},b=w&&g&&g[l]&&!/CriOS/.test(navigator.userAgent),h=n.exports={offset:u,now:a,origin:v,features:{},xhrWrappable:b};e(1),d[l]?(d[l]("DOMContentLoaded",i,!1),p[l]("load",r,!1)):(d[m]("onreadystatechange",o),p[m]("onload",r)),f("mark",["firstbyte",u],null,"api");var x=0,E=e(4)},{}]},{},["loader"]);</script><script type="text/javascript">window.NREUM||(NREUM={});NREUM.info={"beacon":"bam.nr-data.net","queueTime":0,"licenseKey":"4c8610d177","agent":"","transactionName":"NFZaMEVUV0ZVBkBeCQ0cbRZeGktaRwdVUElJ","applicationID":"3371695","errorBeacon":"bam.nr-data.net","applicationTime":242}</script>
+<meta name="robots" content="index,nofollow">
+
+<title>rosbag/Commandline - ROS Wiki</title>
+<script type="text/javascript" src="rosbag_Commandline%20-%20ROS%20Wiki_files/common.js"></script>
+
+<script type="text/javascript">
+<!--
+var search_hint = "Search";
+//-->
+</script>
+
+
+<link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="rosbag_Commandline%20-%20ROS%20Wiki_files/common.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="screen" href="rosbag_Commandline%20-%20ROS%20Wiki_files/screen.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="print" href="rosbag_Commandline%20-%20ROS%20Wiki_files/print.css">
+<link rel="stylesheet" type="text/css" charset="utf-8" media="projection" href="rosbag_Commandline%20-%20ROS%20Wiki_files/projection.css">
+
+<!-- css only for MS IE6/IE7 browsers -->
+<!--[if lt IE 8]>
+   <link rel="stylesheet" type="text/css" charset="utf-8" media="all" href="/moin_static197/rostheme/css/msie.css">
+<![endif]-->
+
+
+
+
+<link rel="canonical" href="http://wiki.ros.org/rosbag/Commandline">
+
+<link rel="Start" href="http://wiki.ros.org/Documentation">
+<link rel="Alternate" title="Wiki Markup" href="http://wiki.ros.org/rosbag/Commandline?action=raw">
+<link rel="Alternate" media="print" title="Print View" href="http://wiki.ros.org/rosbag/Commandline?action=print">
+<link rel="Up" href="http://wiki.ros.org/rosbag">
+<link rel="Search" href="http://wiki.ros.org/FindPage">
+<link rel="Index" href="http://wiki.ros.org/TitleIndex">
+<link rel="Glossary" href="http://wiki.ros.org/WordIndex">
+<link rel="Help" href="http://wiki.ros.org/HelpOnFormatting">
+</head>
+
+<body dir="ltr" lang="en">
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="rosbag_Commandline%20-%20ROS%20Wiki_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5950817-2");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+<script type="text/javascript">
+<!--// Initialize search form
+var f = document.getElementById('searchform');
+if(f) f.getElementsByTagName('label')[0].style.display = 'none';
+var e = document.getElementById('searchinput');
+if(e) {
+  searchChange(e);
+  searchBlur(e);
+}
+
+function handleSubmit() {
+  var f = document.getElementById('searchform');
+  var t = document.getElementById('searchinput');
+  var r = document.getElementById('real_searchinput');
+  
+  //alert("handleSubmit "+ t.value);
+  if(t.value.match(/review/)) {
+    r.value = t.value;
+  } else {
+    //r.value = t.value + " -PackageReviewCategory -StackReviewCategory -M3Review -DocReview -ApiReview -HelpOn -BadContent -LocalSpellingWords";
+    r.value = t.value + " -PackageReviewCategory -StackReviewCategory -DocReview -ApiReview";
+  }
+  //return validate(f);
+}
+//-->
+</script>
+
+<div id="dpage">
+  <div id="dpage-inner">
+    <div id="header"><div id="topnav">
+
+<!-- Alert box -->
+<!-- To enable the alert box uncomment the block below. Change the alert_box_name to a new name. Then update the content below the button. -->
+<!-- Disabling alert box
+    <div class="alert alert-info alert-dismissable" style="text-align: center;">
+<script>
+jQuery(function( $ ){
+    alert_box_name = 'roswiki_roscon2016_early_registration_last_day'
+    state = localStorage.getItem(alert_box_name);
+    if (!state) {
+      localStorage.setItem(alert_box_name, 'open');
+    }
+    state = localStorage.getItem(alert_box_name);
+    if (state == 'closed') {
+        $( '#topnav .alert' ).hide();
+    }
+    $( '.close' ).click(function () {
+	console.log('in .close.click');
+        localStorage.setItem(alert_box_name, 'closed');
+        $( '#topnav .alert' ).hide();
+  });
+});
+</script>
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      Early registration for <a href="http://roscon.ros.org/2016">ROSCon 2016</a> ends today, August 26th! <br><a href="https://events.osrfoundation.org/roscon-2016-registration/">Register now</a> to get the early registration discount. And <a href="http://conradhotels.hilton.com/en/ch/groups/personalized/S/SELCICI-GROSA-20161003/index.jhtml?WT.mc_id=POG">book you discounted hotel rooms</a> at our <a href="http://roscon.ros.org/2016/#location">discounted rates</a>.
+    </div>
+ End disabling alert box -->
+<!-- End Alert box -->
+
+      <table id="topnav-table">
+        <tbody><tr>
+          <td width="300" valign="top"><a href="http://wiki.ros.org/"><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/ros_org.png" alt="ros.org" width="238" border="0" height="51"></a></td>
+          <td width="500" valign="middle">
+            <a href="http://www.ros.org/about-ros">About</a>
+            |
+            <a href="http://wiki.ros.org/Support">Support</a>
+            |
+            <a href="http://discourse.ros.org/">Discussion Forum</a>
+            |
+            <a href="http://status.ros.org/">Service Status</a>
+            |
+            <a href="http://answers.ros.org/">Q&amp;A answers.ros.org</a>
+
+<!--<a href="http://roscon.ros.org/2016/"><img align="middle" style="padding-left: 15px;" src="http://ros.org/images/roscon_wiki_header.jpg" width="133" height="65" alt="ROSCon 2016" /></a>
+-->
+
+<!-- <a href="https://events.osrfoundation.org/ros-kong-2014/"><img align="middle" style="padding-left: 15px;" src="http://ros.org/images/ros_kong_2014_badge.png" width="133" height="38" alt="roskong" /></a>
+-->
+<!--a href="https://events.osrfoundation.org/ros-kong-2014/"><img align="middle" style="padding-left: 15px;" src="http://imgur.com/eMzUJVe.png" width="133" height="38" alt="roskong" /></a-->
+          </td>
+
+          <td valign="middle" align="right">
+
+<script language="Javascript">
+
+function Searchy(theButton){
+
+theForm = theButton.form;
+newID = theForm.input.value;
+theForm.q.value = newID;
+theForm.input.value=theForm.input.value
+
+}
+</script>
+
+
+<form action="http://www.ros.org/search/index.html" id="cse">
+  <div>
+    <label>Search:</label>
+    <input name="cx" value="018259903093183594226:txvzw9fat6w" type="hidden">
+    <input name="cof" value="FORID:11;NB:1" type="hidden">
+    <input name="filter" value="0" type="hidden">
+    <input name="num" value="10" type="hidden">
+
+    <input name="ie" value="UTF-8" type="hidden">
+    <input name="input" id="input" autocomplete="on" style="width: 35%" type="text">
+    <input name="q" value="" type="hidden">
+    <input name="sa" value="Submit" onclick="Searchy(this)" type="submit">
+
+  </div>
+</form>
+
+         </td>
+      </tr>
+      <tr>
+        <td colspan="3" width="1024" height="53"><nobr><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/menu_left.png" alt="" width="17" height="53"><a href="http://wiki.ros.org/"><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/menu_documentation.png" alt="Documentation" width="237" border="0" height="53"></a><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/menu_spacer.png" width="69" height="53"><a href="http://www.ros.org/browse/"><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/menu_browse_software.png" alt="Browse Software" width="268" border="0" height="53"></a><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/menu_spacer.png" width="69" height="53"><a href="http://www.ros.org/news"><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/menu_news.png" alt="News" width="84" border="0" height="53"></a><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/menu_spacer.png" width="69" height="53"><a href="http://wiki.ros.org/ROS/Installation"><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/menu_download.png" alt="Download" width="151" border="0" height="53"></a><img src="rosbag_Commandline%20-%20ROS%20Wiki_files/menu_right.png" width="60" height="53"></nobr></td>
+
+      </tr>
+    </tbody></table> <!-- topnav-table -->
+
+    </div> <!-- /#topav -->
+  </div> <!-- /#header -->
+
+
+<div id="header2">
+
+<ul id="pagelocation">
+<li><a href="http://wiki.ros.org/rosbag">rosbag</a></li><li><a class="backlink" href="http://wiki.ros.org/action/fullsearch/rosbag/Commandline?action=fullsearch&amp;context=180&amp;value=linkto%3A%22rosbag%2FCommandline%22" rel="nofollow" title="Click to do a full-text search for this title">Commandline</a></li>
+</ul>
+
+<div id="locationline">
+</div>
+</div>
+
+<div id="sidebar">
+<div class="sidepanel">
+<h1>Wiki</h1>
+
+<ul id="navibar">
+<li class="wikilink"><a href="http://wiki.ros.org/Distributions">Distributions</a></li><li class="wikilink"><a href="http://wiki.ros.org/ROS/Installation">ROS/Installation</a></li><li class="wikilink"><a href="http://wiki.ros.org/ROS/Tutorials">ROS/Tutorials</a></li><li class="wikilink"><a href="http://wiki.ros.org/RecentChanges">RecentChanges</a></li><li class="current"><a href="http://wiki.ros.org/rosbag/Commandline">rosbag/Commandline</a></li>
+</ul>
+
+</div>
+<div class="sidepanel">
+<h1>Page</h1>
+<ul class="editbar"><li><span class="disabled">Immutable Page</span></li><li class="toggleCommentsButton" style="display:none;"><a href="#" class="nbcomment" onclick="toggleComments();return false;">Comments</a></li><li><a class="nbinfo" href="http://wiki.ros.org/action/info/rosbag/Commandline?action=info" rel="nofollow">Info</a></li><li><a class="nbattachments" href="http://wiki.ros.org/action/AttachFile/rosbag/Commandline?action=AttachFile" rel="nofollow">Attachments</a></li><li>
+<form class="actionsmenu" method="GET" action="/rosbag/Commandline">
+<div>
+    
+    <select name="action" onchange="if ((this.selectedIndex != 0) &amp;&amp;
+                      (this.options[this.selectedIndex].disabled == false)) {
+                this.form.submit();
+            }
+            this.selectedIndex = 0;">
+        <option value="show" selected="selected">More Actions:</option><option value="raw">Raw Text</option>
+<option value="print">Print View</option>
+<option value="RenderAsDocbook">Render as Docbook</option>
+<option value="show" disabled="disabled" class="disabled">Delete Cache</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="SpellCheck">Check Spelling</option>
+<option value="LikePages">Like Pages</option>
+<option value="LocalSiteMap">Local Site Map</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="RenamePage" disabled="disabled" class="disabled">Rename Page</option>
+<option value="CopyPage">Copy Page</option>
+<option value="DeletePage" disabled="disabled" class="disabled">Delete Page</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="MyPages">My Pages</option>
+<option value="show" disabled="disabled" class="disabled">Subscribe User</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="show" disabled="disabled" class="disabled">Remove Spam</option>
+<option value="show" disabled="disabled" class="disabled">Revert to this revision</option>
+<option value="PackagePages">Package Pages</option>
+<option value="SyncPages">Sync Pages</option>
+<option value="show" disabled="disabled" class="disabled">------------------------</option>
+<option value="CreatePdfDocument">CreatePdfDocument</option>
+<option value="Load">Load</option>
+<option value="RawFile">RawFile</option>
+<option value="Save">Save</option>
+<option value="SlideShow">SlideShow</option>
+    </select>
+    
+    
+</div>
+<script type="text/javascript">
+<!--// Init menu
+actionsMenuInit('More Actions:');
+//-->
+</script>
+</form>
+</li></ul>
+
+</div>
+<div class="sidepanel">
+<h1>User</h1>
+<ul id="username"><li><a href="http://wiki.ros.org/action/login/rosbag/Commandline?action=login" id="login" rel="nofollow">Login</a></li></ul>
+</div>
+</div>
+
+<div id="page" dir="ltr" lang="en">
+
+<div dir="ltr" id="content" lang="en"><span class="anchor" id="top"></span>
+<span class="anchor" id="line-1"></span><p class="line862">The <a href="http://wiki.ros.org/rosbag">rosbag</a> command-line tool provides functionality for ROS <a href="http://wiki.ros.org/Bags">bags</a>. <span class="anchor" id="line-2"></span><span class="anchor" id="line-3"></span></p><p class="line874">It
+ can record a bag, republish the messages from one or more bags, 
+summarize the contents of a bag, check a bag's message definitions, 
+filter a bag's messages based on a Python expression, compress and 
+decompress a bag and rebuild a bag's index. <span class="anchor" id="line-4"></span><span class="anchor" id="line-5"></span></p><p class="line874">This is the current list of supported commands: <span class="anchor" id="line-6"></span><span class="anchor" id="line-7"></span></p><ul><li style="list-style-type:none"><p class="line891"><a href="http://wiki.ros.org/rosbag/Commandline#record">record</a> <span class="anchor" id="line-8"></span></p><ul><li style="list-style-type:none">Record a bag file with the contents of specified topics. <span class="anchor" id="line-9"></span></li></ul><p class="line891"><a href="http://wiki.ros.org/rosbag/Commandline#info">info</a> <span class="anchor" id="line-10"></span></p><ul><li style="list-style-type:none">Summarize the contents of a bag file. <span class="anchor" id="line-11"></span></li></ul><p class="line891"><a href="http://wiki.ros.org/rosbag/Commandline#play">play</a> <span class="anchor" id="line-12"></span></p><ul><li style="list-style-type:none">Play back the contents of one or more bag files. <span class="anchor" id="line-13"></span></li></ul><p class="line891"><a href="http://wiki.ros.org/rosbag/Commandline#check">check</a> <span class="anchor" id="line-14"></span></p><ul><li style="list-style-type:none">Determine whether a bag is playable in the current system, or if it can be migrated. <span class="anchor" id="line-15"></span></li></ul><p class="line891"><a href="http://wiki.ros.org/rosbag/Commandline#fix">fix</a> <span class="anchor" id="line-16"></span></p><ul><li style="list-style-type:none">Repair the messages in a bag file so that it can be played in the current system. <span class="anchor" id="line-17"></span></li></ul><p class="line891"><a href="http://wiki.ros.org/rosbag/Commandline#filter">filter</a> <span class="anchor" id="line-18"></span></p><ul><li style="list-style-type:none">Convert a bag file using Python expressions. <span class="anchor" id="line-19"></span></li></ul><p class="line891"><a href="http://wiki.ros.org/rosbag/Commandline#compress">compress</a> <span class="anchor" id="line-20"></span></p><ul><li style="list-style-type:none">Compress one or more bag files. <span class="anchor" id="line-21"></span></li></ul><p class="line891"><a href="http://wiki.ros.org/rosbag/Commandline#decompress">decompress</a> <span class="anchor" id="line-22"></span></p><ul><li style="list-style-type:none">Decompress one or more bag files. <span class="anchor" id="line-23"></span></li></ul><p class="line891"><a href="http://wiki.ros.org/rosbag/Commandline#reindex">reindex</a> <span class="anchor" id="line-24"></span></p><ul><li style="list-style-type:none">Reindex one or more broken bag files. <span class="anchor" id="line-25"></span><span class="anchor" id="line-26"></span></li></ul></li></ul><p class="line874">These are described in greater detail in the following sections. <span class="anchor" id="line-27"></span><span class="anchor" id="line-28"></span></p><p class="line867"><span class="anchor" id="record"></span> <span class="anchor" id="line-29"></span><span class="anchor" id="line-30"></span></p><p class="line867">
+</p><h2 id="rosbag_record">rosbag record</h2>
+<span class="anchor" id="line-31"></span><p class="line867"><tt class="backtick">rosbag&nbsp;record</tt>
+ subscribes to topics and writes a bag file with the contents of all 
+messages published on those topics.  The file contains interlaced, 
+serialized ROS messages dumped directly to a single file as they come in
+ over the wire.  This is the most performance and disk-friendly 
+recording format possible.  To further reduce disk usage, you can 
+compress bag files as they are created. <span class="anchor" id="line-32"></span><span class="anchor" id="line-33"></span></p><p class="line862">If you are recording messages at a high bandwidth, such as from cameras, it is strongly recommended you run <tt class="backtick">rosbag&nbsp;record</tt> on the same machine as the camera, and specify the file destination as being on the local machine disk. <span class="anchor" id="line-34"></span><span class="anchor" id="line-35"></span></p><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">record&nbsp;&lt;topic-names&gt;</tt> <span class="anchor" id="line-36"></span></p><ul><li style="list-style-type:none">Record a bag file with the contents of the specified topics. <span class="anchor" id="line-37"></span><span class="anchor" id="line-38"></span><span class="anchor" id="line-39"></span><pre><span class="anchor" id="line-1-1"></span>$ rosbag record rosout tf cmd_vel</pre><span class="anchor" id="line-40"></span></li></ul><p class="line891"><tt class="backtick">-h</tt>, <tt class="backtick">--help</tt> <span class="anchor" id="line-41"></span></p><ul><li style="list-style-type:none">Show the usage and exit. <span class="anchor" id="line-42"></span><span class="anchor" id="line-43"></span><span class="anchor" id="line-44"></span><pre><span class="anchor" id="line-1-2"></span>$ rosbag record -h</pre><span class="anchor" id="line-45"></span></li></ul><p class="line891"><tt class="backtick">-a</tt>, <tt class="backtick">--all</tt> <span class="anchor" id="line-46"></span></p><ul><li style="list-style-type:none">Record all topics. <span class="anchor" id="line-47"></span><span class="anchor" id="line-48"></span><span class="anchor" id="line-49"></span><pre><span class="anchor" id="line-1-3"></span>$ rosbag record -a</pre><span class="anchor" id="line-50"></span><p class="line862">Note that newly published topics are discovered by periodically polling the master.  <tt class="backtick">rosbag&nbsp;record&nbsp;-a</tt> will likely miss initial messages published on any topic. <span class="anchor" id="line-51"></span></p></li></ul><p class="line891"><tt class="backtick">-e</tt>, <tt class="backtick">--regex</tt> <span class="anchor" id="line-52"></span></p><ul><li style="list-style-type:none">Match topics using regular expressions. <span class="anchor" id="line-53"></span><span class="anchor" id="line-54"></span><span class="anchor" id="line-55"></span><pre><span class="anchor" id="line-1-4"></span>$ rosbag record -e "/(.*)_stereo/(left|right)/image_rect_color"</pre><span class="anchor" id="line-56"></span></li></ul><p class="line891"><tt class="backtick">-x&nbsp;EXCLUDE_REGEX</tt>, <tt class="backtick">--exclude=EXCLUDE=REGEX</tt> <span class="anchor" id="line-57"></span></p><ul><li style="list-style-type:none"><p class="line862">Exclude topics matching the given regular expression (subtracts from <tt class="backtick">-a</tt> or <tt class="backtick">-e</tt>). <span class="anchor" id="line-58"></span><span class="anchor" id="line-59"></span><span class="anchor" id="line-60"></span></p><pre><span class="anchor" id="line-1-5"></span>$ rosbag record -e "/wide_stereo(.*)" -x "(.*)/points(.*)"</pre><span class="anchor" id="line-61"></span></li></ul><p class="line891"><tt class="backtick">-q</tt>, <tt class="backtick">--quiet</tt> <span class="anchor" id="line-62"></span></p><ul><li style="list-style-type:none">Suppress console output. <span class="anchor" id="line-63"></span><span class="anchor" id="line-64"></span><span class="anchor" id="line-65"></span><pre><span class="anchor" id="line-1-6"></span>$ rosbag record -q /chatter</pre><span class="anchor" id="line-66"></span></li></ul><p class="line891"><tt class="backtick">-d</tt>, <tt class="backtick">--duration</tt> <span class="anchor" id="line-67"></span></p><ul><li style="list-style-type:none">Specify the maximum duration of the recorded bag file. <span class="anchor" id="line-68"></span><span class="anchor" id="line-69"></span><span class="anchor" id="line-70"></span><span class="anchor" id="line-71"></span><span class="anchor" id="line-72"></span><pre><span class="anchor" id="line-1-7"></span>$ rosbag record --duration=30 /chatter
+<span class="anchor" id="line-2-1"></span>$ rosbag record --duration=5m /chatter
+<span class="anchor" id="line-3-1"></span>$ rosbag record --duration=2h /chatter</pre><span class="anchor" id="line-73"></span></li></ul><p class="line891"><tt class="backtick">-o&nbsp;PREFIX</tt>, <tt class="backtick">--output-prefix=PREFIX</tt> <span class="anchor" id="line-74"></span></p><ul><li style="list-style-type:none">Prepend PREFIX to beginning of bag name before date stamp. <span class="anchor" id="line-75"></span><span class="anchor" id="line-76"></span><span class="anchor" id="line-77"></span><pre><span class="anchor" id="line-1-8"></span>$ rosbag record -o session1 /chatter</pre><span class="anchor" id="line-78"></span></li></ul><p class="line891"><tt class="backtick">-O&nbsp;NAME</tt>, <tt class="backtick">--output-name=NAME</tt> <span class="anchor" id="line-79"></span></p><ul><li style="list-style-type:none">Record to bag with name NAME.bag. <span class="anchor" id="line-80"></span><span class="anchor" id="line-81"></span><span class="anchor" id="line-82"></span><pre><span class="anchor" id="line-1-9"></span>$ rosbag record -O session2_090210.bag /chatter</pre><span class="anchor" id="line-83"></span></li></ul><p class="line891"><tt class="backtick">--split</tt> <span class="anchor" id="line-84"></span></p><ul><li style="list-style-type:none">Split the bag when maximum size or duration is reached <span class="anchor" id="line-85"></span><span class="anchor" id="line-86"></span><span class="anchor" id="line-87"></span><span class="anchor" id="line-88"></span><span class="anchor" id="line-89"></span><span class="anchor" id="line-90"></span><pre><span class="anchor" id="line-1-10"></span>$ rosbag record --split --size=1024 /chatter
+<span class="anchor" id="line-2-2"></span>$ rosbag record --split --duration=30 /chatter
+<span class="anchor" id="line-3-2"></span>$ rosbag record --split --duration=5m /chatter
+<span class="anchor" id="line-4-1"></span>$ rosbag record --split --duration=2h /chatter</pre><span class="anchor" id="line-91"></span></li></ul><p class="line891"><tt class="backtick">--max-splits=MAX_SPLITS</tt>  <span style="background-color:#FFFF00; font-weight:bold; padding: 3px;">New in ROS Kinetic</span> <span class="anchor" id="line-92"></span></p><ul><li style="list-style-type:none">Split bag at most MAX_SPLITS times, then begin deleting the oldest files. This creates a fixed size or duration recording. <span class="anchor" id="line-93"></span><span class="anchor" id="line-94"></span><span class="anchor" id="line-95"></span><span class="anchor" id="line-96"></span><pre><span class="anchor" id="line-1-11"></span>$ rosbag record --split --size 1024 --max-splits 3 /chatter
+<span class="anchor" id="line-2-3"></span>$ rosbag record --split --duration 10m --max-splits 6 /chatter</pre><span class="anchor" id="line-97"></span></li></ul><p class="line891"><tt class="backtick">-b&nbsp;SIZE</tt>, <tt class="backtick">--buffsize=SIZE</tt> <span class="anchor" id="line-98"></span></p><ul><li style="list-style-type:none"><p class="line862">Use
+ an internal buffer of SIZE MB (Default: 256, 0 = infinite). This is the
+ message queue of the recorder object, before messages are being passed 
+on to the bag. Lowering this value might result in messages being 
+dropped before they reach the recording process.<br>
+ <span class="anchor" id="line-99"></span><span class="anchor" id="line-100"></span><span class="anchor" id="line-101"></span></p><pre><span class="anchor" id="line-1-12"></span>$ rosbag record -b 1024 /chatter</pre><span class="anchor" id="line-102"></span></li></ul><p class="line891"><tt class="backtick">--chunksize=SIZE</tt> <span class="anchor" id="line-103"></span></p><ul><li style="list-style-type:none"><p class="line862">Advanced.
+ Record to chunks of SIZE KB (Default: 768). This is a buffer within the
+ bag file object. Lowering this value will result in more writes to 
+disk.<br>
+ <span class="anchor" id="line-104"></span><span class="anchor" id="line-105"></span><span class="anchor" id="line-106"></span></p><pre><span class="anchor" id="line-1-13"></span>$ rosbag record --chunksize=1024 /chatter</pre><span class="anchor" id="line-107"></span></li></ul><p class="line891"><tt class="backtick">-l&nbsp;NUM</tt>, <tt class="backtick">--limit=NUM</tt> <span class="anchor" id="line-108"></span></p><ul><li style="list-style-type:none">Only record NUM messages on each topic. <span class="anchor" id="line-109"></span><span class="anchor" id="line-110"></span><span class="anchor" id="line-111"></span><pre><span class="anchor" id="line-1-14"></span>$ rosbag record -l 1000 /chatter</pre><span class="anchor" id="line-112"></span></li></ul><p class="line891"><tt class="backtick">--node=NODE</tt> <span class="anchor" id="line-113"></span></p><ul><li style="list-style-type:none">Record all topics subscribed to by a specific node <span class="anchor" id="line-114"></span><span class="anchor" id="line-115"></span><span class="anchor" id="line-116"></span><pre><span class="anchor" id="line-1-15"></span>$ rosbag record --node=/joy_teleop</pre><span class="anchor" id="line-117"></span></li></ul><p class="line891"><tt class="backtick">-j</tt>, <tt class="backtick">--bz2</tt> <span class="anchor" id="line-118"></span></p><ul><li style="list-style-type:none"><p class="line862">Use BZ2 compression.  See <a href="http://wiki.ros.org/rosbag/Commandline#compress">compress</a> for details. <span class="anchor" id="line-119"></span><span class="anchor" id="line-120"></span><span class="anchor" id="line-121"></span></p><pre><span class="anchor" id="line-1-16"></span>$ rosbag record -j /chatter</pre><span class="anchor" id="line-122"></span><span class="anchor" id="line-123"></span></li></ul></li><li class="gap" style="list-style-type:none"><p class="line891"><tt class="backtick">--lz4</tt> <span class="anchor" id="line-124"></span></p><ul><li style="list-style-type:none"><p class="line862">Use LZ4 compression.  See <a href="http://wiki.ros.org/rosbag/Commandline#compress">compress</a> for details. <span class="anchor" id="line-125"></span><span class="anchor" id="line-126"></span><span class="anchor" id="line-127"></span></p><pre><span class="anchor" id="line-1-17"></span>$ rosbag record --lz4 /chatter</pre><span class="anchor" id="line-128"></span><span class="anchor" id="line-129"></span></li></ul></li></ul><p class="line867"><span class="anchor" id="info"></span> <span class="anchor" id="line-130"></span><span class="anchor" id="line-131"></span></p><p class="line867">
+</p><h2 id="rosbag_info">rosbag info</h2>
+<span class="anchor" id="line-132"></span><p class="line867"><tt class="backtick">rosbag&nbsp;info</tt>
+ displays a human-readable summary of the contents of the bag files, 
+including start and end times, topics with their types, message counts 
+and median frequency, and compression statistics. <span class="anchor" id="line-133"></span><span class="anchor" id="line-134"></span></p><p class="line862">To output a machine-readable representation, use <tt class="backtick">--yaml</tt>.  See the <a href="http://wiki.ros.org/rosbag/Cookbook#get_summary_information">cookbook</a> for an example of how to load this representation in code. <span class="anchor" id="line-135"></span><span class="anchor" id="line-136"></span></p><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">info&nbsp;&lt;bag-files&gt;</tt> <span class="anchor" id="line-137"></span></p><ul><li style="list-style-type:none">Display a summary of the contents of the bag files. <span class="anchor" id="line-138"></span><span class="anchor" id="line-139"></span><span class="anchor" id="line-140"></span><pre><span class="anchor" id="line-1-18"></span>$ rosbag info session*.bag</pre><span class="anchor" id="line-141"></span></li></ul><p class="line891"><tt class="backtick">-h</tt>, <tt class="backtick">--help</tt> <span class="anchor" id="line-142"></span></p><ul><li style="list-style-type:none">Show the usage and exit. <span class="anchor" id="line-143"></span><span class="anchor" id="line-144"></span><span class="anchor" id="line-145"></span><pre><span class="anchor" id="line-1-19"></span>$ rosbag info -h</pre><span class="anchor" id="line-146"></span></li></ul><p class="line891"><tt class="backtick">-y</tt>, <tt class="backtick">--yaml</tt> <span class="anchor" id="line-147"></span></p><ul><li style="list-style-type:none"><p class="line862">Print information in <a class="http" href="http://www.yaml.org/">YAML</a> format. <span class="anchor" id="line-148"></span><span class="anchor" id="line-149"></span><span class="anchor" id="line-150"></span></p><pre><span class="anchor" id="line-1-20"></span>$ rosbag info -y /path/to/my.bag</pre><span class="anchor" id="line-151"></span></li></ul><p class="line891"><tt class="backtick">-k&nbsp;KEY</tt>, <tt class="backtick">--key=KEY</tt> <span class="anchor" id="line-152"></span></p><ul><li style="list-style-type:none"><p class="line862">Print information only on the given field (requires <tt class="backtick">-y</tt>). <span class="anchor" id="line-153"></span><span class="anchor" id="line-154"></span><span class="anchor" id="line-155"></span></p><pre><span class="anchor" id="line-1-21"></span>$ rosbag info -y -k duration /path/to/my.bag</pre><span class="anchor" id="line-156"></span><span class="anchor" id="line-157"></span></li></ul></li></ul><p class="line867"><em>Example usage:</em> <span class="anchor" id="line-158"></span><span class="anchor" id="line-159"></span></p><p class="line867"><span class="anchor" id="line-160"></span><span class="anchor" id="line-161"></span><span class="anchor" id="line-162"></span><span class="anchor" id="line-163"></span><span class="anchor" id="line-164"></span><span class="anchor" id="line-165"></span><span class="anchor" id="line-166"></span><span class="anchor" id="line-167"></span><span class="anchor" id="line-168"></span><span class="anchor" id="line-169"></span><span class="anchor" id="line-170"></span><span class="anchor" id="line-171"></span></p><pre><span class="anchor" id="line-1-22"></span>$ rosbag info foo.bag
+<span class="anchor" id="line-2-4"></span>path:        foo.bag
+<span class="anchor" id="line-3-3"></span>version:     2.0
+<span class="anchor" id="line-4-2"></span>duration:    1.2s
+<span class="anchor" id="line-5-1"></span>start:       Jun 17 2010 14:24:58.83 (1276809898.83)
+<span class="anchor" id="line-6-1"></span>end:         Jun 17 2010 14:25:00.01 (1276809900.01)
+<span class="anchor" id="line-7-1"></span>size:        14.2 KB
+<span class="anchor" id="line-8-1"></span>messages:    119
+<span class="anchor" id="line-9-1"></span>compression: none [1/1 chunks]
+<span class="anchor" id="line-10-1"></span>types:       geometry_msgs/Point [4a842b65f413084dc2b10fb484ea7f17]
+<span class="anchor" id="line-11-1"></span>topics:      /points   119 msgs @ 100.0 Hz : geometry_msgs/Point</pre><span class="anchor" id="line-172"></span><p class="line867"><span class="anchor" id="play"></span> <span class="anchor" id="line-173"></span><span class="anchor" id="line-174"></span></p><p class="line867">
+</p><h2 id="rosbag_play">rosbag play</h2>
+<span class="anchor" id="line-175"></span><p class="line867"><tt class="backtick">rosbag&nbsp;play</tt>
+ reads the contents of one or more bag file, and plays them back in a 
+time-synchronized fashion.  Time synchronization occurs based on the 
+global timestamps at which messages were received.  Playing will begin 
+immediately, and then future messages will be published according to the
+ relative offset times.  If two separate bag files are used, they are 
+treated as a single bag with interlaced times according to the 
+timestamps.  This means if you record one bag, wait an hour, and record a
+ second bag, when you play them back together you will have an hour-long
+ dead period in the middle of your playback. <span class="anchor" id="line-176"></span><span class="anchor" id="line-177"></span></p><p class="line862">If you do not want to observe playback timing, the <tt class="backtick">-i</tt>
+ option will playback all messages from the file as fast as possible.  
+Note that for large files this will often lead to exceeding your 
+incoming buffers. <span class="anchor" id="line-178"></span><span class="anchor" id="line-179"></span></p><p class="line862">Additionally,
+ during playing, you can pause at any time by pressing space.  When 
+paused, you can step through messages by pressing <tt class="backtick">s</tt>. <span class="anchor" id="line-180"></span><span class="anchor" id="line-181"></span></p><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">play&nbsp;&lt;bag-files&gt;</tt> <span class="anchor" id="line-182"></span></p><ul><li style="list-style-type:none">Play back (publish) the contents of the given bags. <span class="anchor" id="line-183"></span><span class="anchor" id="line-184"></span><span class="anchor" id="line-185"></span><pre><span class="anchor" id="line-1-23"></span>$ rosbag play recorded1.bag recorded2.bag</pre><span class="anchor" id="line-186"></span></li></ul><p class="line891"><tt class="backtick">-h</tt>, <tt class="backtick">--help</tt> <span class="anchor" id="line-187"></span></p><ul><li style="list-style-type:none">Show the usage and exit. <span class="anchor" id="line-188"></span><span class="anchor" id="line-189"></span><span class="anchor" id="line-190"></span><pre><span class="anchor" id="line-1-24"></span>$ rosbag play -h</pre><span class="anchor" id="line-191"></span></li></ul><p class="line891"><tt class="backtick">-q</tt>, <tt class="backtick">--quiet</tt> <span class="anchor" id="line-192"></span></p><ul><li style="list-style-type:none">Suppress console output. <span class="anchor" id="line-193"></span><span class="anchor" id="line-194"></span><span class="anchor" id="line-195"></span><pre><span class="anchor" id="line-1-25"></span>$ rosbag play -q recorded1.bag</pre><span class="anchor" id="line-196"></span></li></ul><p class="line891"><tt class="backtick">-i</tt>, <tt class="backtick">--immediate</tt> <span class="anchor" id="line-197"></span></p><ul><li style="list-style-type:none">Play back all messages without waiting. <span class="anchor" id="line-198"></span><span class="anchor" id="line-199"></span><span class="anchor" id="line-200"></span><pre><span class="anchor" id="line-1-26"></span>$ rosbag play -i recorded1.bag</pre><span class="anchor" id="line-201"></span></li></ul><p class="line891"><tt class="backtick">--pause</tt> <span class="anchor" id="line-202"></span></p><ul><li style="list-style-type:none">Start in paused mode. <span class="anchor" id="line-203"></span><span class="anchor" id="line-204"></span><span class="anchor" id="line-205"></span><pre><span class="anchor" id="line-1-27"></span>$ rosbag play --pause recorded1.bag</pre><span class="anchor" id="line-206"></span></li></ul><p class="line891"><tt class="backtick">--queue=SIZE</tt> <span class="anchor" id="line-207"></span></p><ul><li style="list-style-type:none"><p class="line862">Use an outgoing queue of size SIZE (defaults to 0.  As of <strong>1.3.3</strong> defaults to 100). <span class="anchor" id="line-208"></span><span class="anchor" id="line-209"></span><span class="anchor" id="line-210"></span></p><pre><span class="anchor" id="line-1-28"></span>$ rosbag play --queue=1000 recorded1.bag</pre><span class="anchor" id="line-211"></span></li></ul><p class="line891"><tt class="backtick">--clock</tt> <span class="anchor" id="line-212"></span></p><ul><li style="list-style-type:none">Publish the clock time <span class="anchor" id="line-213"></span><span class="anchor" id="line-214"></span><span class="anchor" id="line-215"></span><pre><span class="anchor" id="line-1-29"></span>$ rosbag play --clock recorded1.bag</pre><span class="anchor" id="line-216"></span></li></ul><p class="line891"><tt class="backtick">--hz=HZ</tt> <span class="anchor" id="line-217"></span></p><ul><li style="list-style-type:none">Publish clock time at frequency HZ Hz (default: 100). <span class="anchor" id="line-218"></span><span class="anchor" id="line-219"></span><span class="anchor" id="line-220"></span><pre><span class="anchor" id="line-1-30"></span>$ rosbag play --clock --hz=200 recorded1.bag</pre><span class="anchor" id="line-221"></span></li></ul><p class="line891"><tt class="backtick">-d&nbsp;SEC</tt>, <tt class="backtick">--delay=SEC</tt> <span class="anchor" id="line-222"></span></p><ul><li style="list-style-type:none">Sleep SEC seconds after every advertise call (to allow subscribers to connect). <span class="anchor" id="line-223"></span><span class="anchor" id="line-224"></span><span class="anchor" id="line-225"></span><pre><span class="anchor" id="line-1-31"></span>$ rosbag play -d 5 recorded1.bag</pre><span class="anchor" id="line-226"></span></li></ul><p class="line891"><tt class="backtick">-r&nbsp;FACTOR</tt>, <tt class="backtick">--rate=FACTOR</tt> <span class="anchor" id="line-227"></span></p><ul><li style="list-style-type:none">Multiply the publish rate by FACTOR. <span class="anchor" id="line-228"></span><span class="anchor" id="line-229"></span><span class="anchor" id="line-230"></span><pre><span class="anchor" id="line-1-32"></span>$ rosbag play -r 10 recorded1.bag</pre><span class="anchor" id="line-231"></span></li></ul><p class="line891"><tt class="backtick">-s&nbsp;SEC</tt>, <tt class="backtick">--start=SEC</tt> <span class="anchor" id="line-232"></span></p><ul><li style="list-style-type:none">Start SEC seconds into the bags. <span class="anchor" id="line-233"></span><span class="anchor" id="line-234"></span><span class="anchor" id="line-235"></span><pre><span class="anchor" id="line-1-33"></span>$ rosbag play -s 5 recorded1.bag</pre><span class="anchor" id="line-236"></span></li></ul><p class="line891"><tt class="backtick">-u&nbsp;SEC</tt>, <tt class="backtick">--duration=SEC</tt> <span class="anchor" id="line-237"></span></p><ul><li style="list-style-type:none">Play only SEC seconds from the bag files. <span class="anchor" id="line-238"></span><span class="anchor" id="line-239"></span><span class="anchor" id="line-240"></span><pre><span class="anchor" id="line-1-34"></span>$ rosbag play -u 240 recorded1.bag</pre><span class="anchor" id="line-241"></span></li></ul><p class="line891"><tt class="backtick">-l</tt>, <tt class="backtick">--loop</tt> <span class="anchor" id="line-242"></span></p><ul><li style="list-style-type:none">Loop playback. <span class="anchor" id="line-243"></span><span class="anchor" id="line-244"></span><span class="anchor" id="line-245"></span><pre><span class="anchor" id="line-1-35"></span>$ rosbag play -l recorded1.bag</pre><span class="anchor" id="line-246"></span></li></ul><p class="line891"><tt class="backtick">-k</tt>, <tt class="backtick">--keep-alive</tt> <span class="anchor" id="line-247"></span></p><ul><li style="list-style-type:none">Keep alive past end of bag (useful for publishing latched topics). <span class="anchor" id="line-248"></span><span class="anchor" id="line-249"></span><span class="anchor" id="line-250"></span><pre><span class="anchor" id="line-1-36"></span>$ rosbag play -k recorded1.bag</pre><span class="anchor" id="line-251"></span><span class="anchor" id="line-252"></span></li></ul></li></ul><p class="line867"><span class="anchor" id="check"></span> <span class="anchor" id="line-253"></span><span class="anchor" id="line-254"></span></p><p class="line867">
+</p><h2 id="rosbag_check">rosbag check</h2>
+<span class="anchor" id="line-255"></span><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">check&nbsp;&lt;bag-file&gt;</tt> <span class="anchor" id="line-256"></span></p><ul><li style="list-style-type:none">Determine whether or not a bag is playable in the current system. <span class="anchor" id="line-257"></span><span class="anchor" id="line-258"></span><span class="anchor" id="line-259"></span><pre><span class="anchor" id="line-1-37"></span>$ rosbag check old.bag</pre><span class="anchor" id="line-260"></span></li></ul><p class="line891"><tt class="backtick">-h</tt>, <tt class="backtick">--help</tt> <span class="anchor" id="line-261"></span></p><ul><li style="list-style-type:none">Show the usage and exit. <span class="anchor" id="line-262"></span><span class="anchor" id="line-263"></span><span class="anchor" id="line-264"></span><pre><span class="anchor" id="line-1-38"></span>$ rosbag check -h</pre><span class="anchor" id="line-265"></span></li></ul><p class="line891"><tt class="backtick">-g&nbsp;RULEFILE</tt>, <tt class="backtick">--genrules=RULEFILE</tt> <span class="anchor" id="line-266"></span></p><ul><li style="list-style-type:none">Generate a bag migration rule file named RULEFILE. <span class="anchor" id="line-267"></span><span class="anchor" id="line-268"></span><span class="anchor" id="line-269"></span><pre><span class="anchor" id="line-1-39"></span>$ rosbag check -g diagnostics.bmr diag.bag</pre><span class="anchor" id="line-270"></span></li></ul><p class="line891"><tt class="backtick">-a</tt>, <tt class="backtick">--append</tt> <span class="anchor" id="line-271"></span></p><ul><li style="list-style-type:none">Append to the end of an existing bag migration rule file after loading. <span class="anchor" id="line-272"></span><span class="anchor" id="line-273"></span><span class="anchor" id="line-274"></span><pre><span class="anchor" id="line-1-40"></span>$ rosbag check -a -g all.bmr diag.bag</pre><span class="anchor" id="line-275"></span></li></ul><p class="line891"><tt class="backtick">-n</tt>, <tt class="backtick">--noplugins</tt> <span class="anchor" id="line-276"></span></p><ul><li style="list-style-type:none">Do not load rule files via plugins. <span class="anchor" id="line-277"></span><span class="anchor" id="line-278"></span><span class="anchor" id="line-279"></span><pre><span class="anchor" id="line-1-41"></span>$ rosbag check -n diag.bag</pre><span class="anchor" id="line-280"></span><span class="anchor" id="line-281"></span></li></ul></li></ul><p class="line862">If a bag is currently unplayable and non-migratable, it may be necessary to generate rules to bring the bag up to date.  See <a href="http://wiki.ros.org/rosbag/migration">Migrating Messages</a> for the preferred approaches to doing this. <span class="anchor" id="line-282"></span><span class="anchor" id="line-283"></span></p><p class="line867"><span class="anchor" id="fix"></span> <span class="anchor" id="line-284"></span><span class="anchor" id="line-285"></span></p><p class="line867">
+</p><h2 id="rosbag_fix">rosbag fix</h2>
+<span class="anchor" id="line-286"></span><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">fix&nbsp;&lt;in-bag&gt;&nbsp;&lt;out-bag&gt;&nbsp;[rules.bmr]</tt> <span class="anchor" id="line-287"></span></p><ul><li style="list-style-type:none">Repairs a bag using registered rules (and optionally locally defined rules). <span class="anchor" id="line-288"></span><span class="anchor" id="line-289"></span><span class="anchor" id="line-290"></span><pre><span class="anchor" id="line-1-42"></span>$ rosbag fix old.bag repaired.bag myrules.bmr</pre><span class="anchor" id="line-291"></span></li></ul><p class="line891"><tt class="backtick">-h</tt>, <tt class="backtick">--help</tt> <span class="anchor" id="line-292"></span></p><ul><li style="list-style-type:none">Show the usage and exit. <span class="anchor" id="line-293"></span><span class="anchor" id="line-294"></span><span class="anchor" id="line-295"></span><pre><span class="anchor" id="line-1-43"></span>$ rosbag fix -h</pre><span class="anchor" id="line-296"></span></li></ul><p class="line891"><tt class="backtick">-n</tt>, <tt class="backtick">--noplugins</tt> <span class="anchor" id="line-297"></span></p><ul><li style="list-style-type:none">Do not load rule files via plugins. <span class="anchor" id="line-298"></span><span class="anchor" id="line-299"></span><span class="anchor" id="line-300"></span><pre><span class="anchor" id="line-1-44"></span>$ rosbag fix -n old.bag repaired.bag</pre><span class="anchor" id="line-301"></span><span class="anchor" id="line-302"></span></li></ul></li></ul><p class="line867"><span class="anchor" id="filter"></span> <span class="anchor" id="line-303"></span><span class="anchor" id="line-304"></span></p><p class="line867">
+</p><h2 id="rosbag_filter">rosbag filter</h2>
+<span class="anchor" id="line-305"></span><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">filter&nbsp;&lt;in-bag&gt;&nbsp;&lt;out-bag&gt;&nbsp;&lt;expression&gt;</tt> <span class="anchor" id="line-306"></span></p><ul><li style="list-style-type:none">Convert a bag file using the given Python expression. <span class="anchor" id="line-307"></span><span class="anchor" id="line-308"></span><span class="anchor" id="line-309"></span><pre><span class="anchor" id="line-1-45"></span>$ rosbag filter my.bag only-tf.bag "topic == '/tf'"</pre><span class="anchor" id="line-310"></span><span class="anchor" id="line-311"></span></li></ul></li></ul><p class="line874">The Python expression can access any of the Python builtins plus: <span class="anchor" id="line-312"></span><span class="anchor" id="line-313"></span></p><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">topic</tt> <span class="anchor" id="line-314"></span></p><ul><li style="list-style-type:none">the topic of the message <span class="anchor" id="line-315"></span></li></ul><p class="line891"><tt class="backtick">m</tt> <span class="anchor" id="line-316"></span></p><ul><li style="list-style-type:none">the message <span class="anchor" id="line-317"></span></li></ul><p class="line891"><tt class="backtick">t</tt> <span class="anchor" id="line-318"></span></p><ul><li style="list-style-type:none"><p class="line862">time of message. The time is represented as a <a href="http://wiki.ros.org/rospy">rospy</a> <a class="http" href="http://pr.willowgarage.com/pr-docs/ros-packages/rospy/html/classrospy_1_1msg_1_1Time.html">Time</a> object (<tt class="backtick">t.secs</tt>, <tt class="backtick">t.nsecs</tt>) <span class="anchor" id="line-319"></span></p></li></ul><p class="line891"><tt class="backtick">-h</tt>, <tt class="backtick">--help</tt> <span class="anchor" id="line-320"></span></p><ul><li style="list-style-type:none">Show the usage and exit. <span class="anchor" id="line-321"></span><span class="anchor" id="line-322"></span><span class="anchor" id="line-323"></span><pre><span class="anchor" id="line-1-46"></span>$ rosbag filter -h</pre><span class="anchor" id="line-324"></span></li></ul><p class="line891"><tt class="backtick">--print=PRINT-EXPRESSION</tt> <span class="anchor" id="line-325"></span></p><ul><li style="list-style-type:none">Evaluate and print a Python expression for verbose debugging. Uses same variables as filter expression. <span class="anchor" id="line-326"></span><span class="anchor" id="line-327"></span><span class="anchor" id="line-328"></span><pre><span class="anchor" id="line-1-47"></span>$ rosbag filter --print="'%s @ %d.%d: %s' % (topic, t.secs, t.nsecs, m.data)" big.bag small.bag "topic == '/chatter'"</pre><span class="anchor" id="line-329"></span><span class="anchor" id="line-330"></span></li></ul></li></ul><p class="line867"><em>Example output:</em> <span class="anchor" id="line-331"></span><span class="anchor" id="line-332"></span></p><p class="line867"><span class="anchor" id="line-333"></span><span class="anchor" id="line-334"></span><span class="anchor" id="line-335"></span><span class="anchor" id="line-336"></span><span class="anchor" id="line-337"></span><span class="anchor" id="line-338"></span><span class="anchor" id="line-339"></span></p><pre><span class="anchor" id="line-1-48"></span>NO MATCH hello world 68
+<span class="anchor" id="line-2-5"></span>NO MATCH hello world 69
+<span class="anchor" id="line-3-4"></span>NO MATCH hello world 70
+<span class="anchor" id="line-4-3"></span>MATCH hello world 71
+<span class="anchor" id="line-5-2"></span>NO MATCH hello world 72
+<span class="anchor" id="line-6-2"></span>NO MATCH hello world 73</pre><span class="anchor" id="line-340"></span><p class="line874">To filter based on time, convert the time to a floating point number (use UNIX time, to get this value, use rosbag info): <span class="anchor" id="line-341"></span><span class="anchor" id="line-342"></span></p><p class="line867"><span class="anchor" id="line-343"></span><span class="anchor" id="line-344"></span></p><pre><span class="anchor" id="line-1-49"></span>rosbag filter input.bag output.bag "t.to_sec() &lt;= 1284703931.86"</pre><span class="anchor" id="line-345"></span><p class="line867"><span class="anchor" id="compress"></span> <span class="anchor" id="line-346"></span><span class="anchor" id="line-347"></span></p><p class="line867">
+</p><h2 id="rosbag_compress">rosbag compress</h2>
+<span class="anchor" id="line-348"></span><p class="line867"><tt class="backtick">rosbag&nbsp;compress</tt> is a command-line tool for compressing bag files. <span class="anchor" id="line-349"></span><span class="anchor" id="line-350"></span></p><p class="line862">A backup of each bag file (with the extension <tt class="backtick">.orig.bag</tt>) is made before the bag is compressed.  If the backup file already exists (and the <tt class="backtick">-f</tt> option isn't specified) then the tool will not compress the file. <span class="anchor" id="line-351"></span><span class="anchor" id="line-352"></span></p><p class="line862">Currently, there are two supported formats:<a class="http" href="http://www.bzip.org/">BZ2</a> and <a class="http" href="http://cyan4973.github.io/lz4/">LZ4</a>.
+  BZ2 is selected by default.  Which should you prefer?  BZ2 generally 
+produces smaller bags than LZ4, so use it if disk usage is your primary 
+concern.  However, BZ2 is typically much slower than LZ4, both during 
+compression and later when a bag's chunks are decompressed for reading, 
+so use it if you're willing to tolerate slightly larger bags.  <a class="https" href="https://github.com/ros/ros_comm/pull/356">Look here</a> a more detailed discussion and some benchmarks. <span class="anchor" id="line-353"></span><span class="anchor" id="line-354"></span></p><p class="line862">The bag format supports interleaving compressed data chunks with uncompressed chunks in a single bag.  Running <tt class="backtick">rosbag&nbsp;compress</tt> on a bag with compressed data chunks will decompress and compress the bag using the specified compression format. <span class="anchor" id="line-355"></span><span class="anchor" id="line-356"></span></p><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">compress&nbsp;&lt;bag-files&gt;</tt> <span class="anchor" id="line-357"></span></p><ul><li style="list-style-type:none">Compress the given bag files using BZ2. <span class="anchor" id="line-358"></span><span class="anchor" id="line-359"></span><span class="anchor" id="line-360"></span><pre><span class="anchor" id="line-1-50"></span>$ rosbag compress *.bag</pre><span class="anchor" id="line-361"></span></li></ul><p class="line891"><tt class="backtick">-h</tt>, <tt class="backtick">--help</tt> <span class="anchor" id="line-362"></span></p><ul><li style="list-style-type:none">Show the usage and exit. <span class="anchor" id="line-363"></span><span class="anchor" id="line-364"></span><span class="anchor" id="line-365"></span><pre><span class="anchor" id="line-1-51"></span>$ rosbag compress -h</pre><span class="anchor" id="line-366"></span></li></ul><p class="line891"><tt class="backtick">--output-dir=DIR</tt> <span class="anchor" id="line-367"></span></p><ul><li style="list-style-type:none">Write to directory DIR. <span class="anchor" id="line-368"></span><span class="anchor" id="line-369"></span><span class="anchor" id="line-370"></span><pre><span class="anchor" id="line-1-52"></span>$ rosbag compress --output-dir=compressed *.bag</pre><span class="anchor" id="line-371"></span></li></ul><p class="line891"><tt class="backtick">-f</tt>, <tt class="backtick">--force</tt> <span class="anchor" id="line-372"></span></p><ul><li style="list-style-type:none">Force overwriting of backup file it it exists. <span class="anchor" id="line-373"></span><span class="anchor" id="line-374"></span><span class="anchor" id="line-375"></span><pre><span class="anchor" id="line-1-53"></span>$ rosbag compress -f *.bag</pre><span class="anchor" id="line-376"></span></li></ul><p class="line891"><tt class="backtick">-q</tt>, <tt class="backtick">--quiet</tt> <span class="anchor" id="line-377"></span></p><ul><li style="list-style-type:none">Suppress noncritical messages. <span class="anchor" id="line-378"></span><span class="anchor" id="line-379"></span><span class="anchor" id="line-380"></span><pre><span class="anchor" id="line-1-54"></span>$ rosbag compress -q *.bag</pre><span class="anchor" id="line-381"></span></li></ul></li><li style="list-style-type:none"><span class="anchor" id="line-382"></span></li><li style="list-style-type:none"><p class="line891"><tt class="backtick">-j</tt>, <tt class="backtick">--bz2</tt> <span class="anchor" id="line-383"></span></p><ul><li style="list-style-type:none">Use BZ2 to compress data. <span class="anchor" id="line-384"></span><span class="anchor" id="line-385"></span><span class="anchor" id="line-386"></span><pre><span class="anchor" id="line-1-55"></span>$ rosbag compress -j *.bag</pre><span class="anchor" id="line-387"></span></li></ul></li><li style="list-style-type:none"><p class="line891"><tt class="backtick">--lz4</tt> <span class="anchor" id="line-388"></span></p><ul><li style="list-style-type:none">Use LZ4 to compress data. <span class="anchor" id="line-389"></span><span class="anchor" id="line-390"></span><span class="anchor" id="line-391"></span><pre><span class="anchor" id="line-1-56"></span>$ rosbag compress --lz4 *.bag</pre><span class="anchor" id="line-392"></span><span class="anchor" id="line-393"></span></li></ul></li></ul><p class="line867"><span class="anchor" id="decompress"></span> <span class="anchor" id="line-394"></span><span class="anchor" id="line-395"></span></p><p class="line867">
+</p><h2 id="rosbag_decompress">rosbag decompress</h2>
+<span class="anchor" id="line-396"></span><p class="line867"><tt class="backtick">rosbag&nbsp;decompress</tt> is a command-line tool for decompressing bag files.  It automatically determines which compression format a bag uses. <span class="anchor" id="line-397"></span><span class="anchor" id="line-398"></span></p><p class="line862">A backup of each bag file (with the extension <tt class="backtick">.orig.bag</tt>) is made before the bag is decompressed.  If the backup file already exists (and the <tt class="backtick">-f</tt> option isn't specified) then the tool will not decompress the file. <span class="anchor" id="line-399"></span><span class="anchor" id="line-400"></span></p><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">decompress&nbsp;&lt;bag-files&gt;</tt> <span class="anchor" id="line-401"></span></p><ul><li style="list-style-type:none">Decompress the given bag files. <span class="anchor" id="line-402"></span><span class="anchor" id="line-403"></span><span class="anchor" id="line-404"></span><pre><span class="anchor" id="line-1-57"></span>$ rosbag decompress *.bag</pre><span class="anchor" id="line-405"></span></li></ul><p class="line891"><tt class="backtick">-h</tt>, <tt class="backtick">--help</tt> <span class="anchor" id="line-406"></span></p><ul><li style="list-style-type:none">Show the usage and exit. <span class="anchor" id="line-407"></span><span class="anchor" id="line-408"></span><span class="anchor" id="line-409"></span><pre><span class="anchor" id="line-1-58"></span>$ rosbag decompress -h</pre><span class="anchor" id="line-410"></span></li></ul><p class="line891"><tt class="backtick">--output-dir=DIR</tt> <span class="anchor" id="line-411"></span></p><ul><li style="list-style-type:none">Write to directory DIR. <span class="anchor" id="line-412"></span><span class="anchor" id="line-413"></span><span class="anchor" id="line-414"></span><pre><span class="anchor" id="line-1-59"></span>$ rosbag decompress --output-dir=uncompressed *.bag</pre><span class="anchor" id="line-415"></span></li></ul><p class="line891"><tt class="backtick">-f</tt>, <tt class="backtick">--force</tt> <span class="anchor" id="line-416"></span></p><ul><li style="list-style-type:none">Force overwriting of backup file it it exists. <span class="anchor" id="line-417"></span><span class="anchor" id="line-418"></span><span class="anchor" id="line-419"></span><pre><span class="anchor" id="line-1-60"></span>$ rosbag decompress -f *.bag</pre><span class="anchor" id="line-420"></span></li></ul><p class="line891"><tt class="backtick">-q</tt>, <tt class="backtick">--quiet</tt> <span class="anchor" id="line-421"></span></p><ul><li style="list-style-type:none">Suppress noncritical messages. <span class="anchor" id="line-422"></span><span class="anchor" id="line-423"></span><span class="anchor" id="line-424"></span><pre><span class="anchor" id="line-1-61"></span>$ rosbag decompress -q *.bag</pre><span class="anchor" id="line-425"></span><span class="anchor" id="line-426"></span></li></ul></li></ul><p class="line867"><span class="anchor" id="reindex"></span> <span class="anchor" id="line-427"></span><span class="anchor" id="line-428"></span></p><p class="line867">
+</p><h2 id="rosbag_reindex">rosbag reindex</h2>
+<span class="anchor" id="line-429"></span><p class="line867"><tt class="backtick">rosbag&nbsp;reindex</tt>
+ is a command-line tool for repairing broken bag files (or bag files 
+recorded prior to ROS version 0.11.)  If a bag was not closed cleanly 
+for any reason, then the index information may be corrupted.  Use this 
+tool to reread the message data and rebuild the index. <span class="anchor" id="line-430"></span><span class="anchor" id="line-431"></span></p><p class="line862">A backup of each bag file (with the extension <tt class="backtick">.orig.bag</tt>) is made before the bag is reindexed.  If the backup file already exists (and the <tt class="backtick">-f</tt> option isn't specified) then the tool will not reindex the file. <span class="anchor" id="line-432"></span><span class="anchor" id="line-433"></span></p><ul><li style="list-style-type:none"><p class="line891"><tt class="backtick">reindex&nbsp;&lt;bag-files&gt;</tt> <span class="anchor" id="line-434"></span></p><ul><li style="list-style-type:none">Reindex the given bag files. <span class="anchor" id="line-435"></span><span class="anchor" id="line-436"></span><span class="anchor" id="line-437"></span><pre><span class="anchor" id="line-1-62"></span>$ rosbag reindex *.bag</pre><span class="anchor" id="line-438"></span></li></ul><p class="line891"><tt class="backtick">-h</tt>, <tt class="backtick">--help</tt> <span class="anchor" id="line-439"></span></p><ul><li style="list-style-type:none">Show the usage and exit. <span class="anchor" id="line-440"></span><span class="anchor" id="line-441"></span><span class="anchor" id="line-442"></span><pre><span class="anchor" id="line-1-63"></span>$ rosbag reindex -h</pre><span class="anchor" id="line-443"></span></li></ul><p class="line891"><tt class="backtick">--output-dir=DIR</tt> <span class="anchor" id="line-444"></span></p><ul><li style="list-style-type:none">Write to directory DIR. <span class="anchor" id="line-445"></span><span class="anchor" id="line-446"></span><span class="anchor" id="line-447"></span><pre><span class="anchor" id="line-1-64"></span>$ rosbag reindex --output-dir=reindexed *.bag</pre><span class="anchor" id="line-448"></span></li></ul><p class="line891"><tt class="backtick">-f</tt>, <tt class="backtick">--force</tt> <span class="anchor" id="line-449"></span></p><ul><li style="list-style-type:none">Force overwriting of backup file it it exists. <span class="anchor" id="line-450"></span><span class="anchor" id="line-451"></span><span class="anchor" id="line-452"></span><pre><span class="anchor" id="line-1-65"></span>$ rosbag reindex -f *.bag</pre><span class="anchor" id="line-453"></span></li></ul><p class="line891"><tt class="backtick">-q</tt>, <tt class="backtick">--quiet</tt> <span class="anchor" id="line-454"></span></p><ul><li style="list-style-type:none">Suppress noncritical messages. <span class="anchor" id="line-455"></span><span class="anchor" id="line-456"></span><span class="anchor" id="line-457"></span><pre><span class="anchor" id="line-1-66"></span>$ rosbag reindex -q *.bag</pre><span class="anchor" id="line-458"></span></li></ul></li></ul><span class="anchor" id="bottom"></span></div></div>
+<div id="pagebottom"></div>
+</div>
+
+<p id="pageinfo" class="info" dir="ltr" lang="en">Wiki: rosbag/Commandline  (last edited 2017-02-19 12:16:25 by <span title="SimonHarst @ x4e31b7ba.dyn.telefonica.de[78.49.183.186]"><a class="nonexistent" href="http://wiki.ros.org/SimonHarst" title="SimonHarst @ x4e31b7ba.dyn.telefonica.de[78.49.183.186]">SimonHarst</a></span>)</p>
+
+
+
+
+<div style="margin-top: 9px;" class="footer">
+Except where otherwise noted, the ROS wiki is licensed under the <br><a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0</a> | <a href="https://plus.google.com/113789706402978299308" rel="publisher">Find us on Google+</a>
+<hr style="margin-top: 10px;">
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+<a href="http://www.osrfoundation.org/"><img style="margin-top: -1px;" src="rosbag_Commandline%20-%20ROS%20Wiki_files/brought_by_horiz.png"><p></p></a>
+  </div>
+</div>
+</div>
+
+  </div> <!-- /#dpage-inner, /#dpage -->
+
+
+
+
+
+</body></html>
