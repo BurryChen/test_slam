@@ -33,8 +33,8 @@ CATKIN_DEPENDS message_runtime
 ## Build talker and listener
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_executable(hello src/hello.cpp) #其实会生成hello.exe的名字
-Target_link_libraries(hello ${catkin_LIBRARIES}) #添加节点编译需要的库文件。
+#add_executable(hello src/hello.cpp) #其实会生成hello.exe的名字
+#Target_link_libraries(hello ${catkin_LIBRARIES}) #添加节点编译需要的库文件。
 
 #add_executable(talker src/talker.cpp)
 #target_link_libraries(talker ${catkin_LIBRARIES})
@@ -64,11 +64,11 @@ Target_link_libraries(hello ${catkin_LIBRARIES}) #添加节点编译需要的库文件。
  add_subdirectory(src)
 
 
-install(TARGETS  hello
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+#install(TARGETS  hello
+#  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
 
 
 

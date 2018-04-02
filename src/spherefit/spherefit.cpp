@@ -1,5 +1,6 @@
 #include <pcl/ModelCoefficients.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/io/ply_io.h>
 #include <pcl/point_types.h>
 #include <pcl/filters/extract_indices.h>
 #include <pcl/filters/passthrough.h>
@@ -10,7 +11,105 @@
 
 typedef pcl::PointXYZ PointT;
 
+int circle2dfit(std::string infile,std::string outfile, pcl::ModelCoefficients::Ptr coefficients_circle2d)
+{
+  std::string fn;
+  //fn=argv[1]; 
+  //fn="table_scene_mug_stereo_textured.pcd";
+  fn=infile;
+  // All the objects needed
+  pcl::PCDReader reader;
+  pcl::PassThrough<PointT> pass;
+  pcl::NormalEstimation<PointT, pcl::Normal> ne;
+  pcl::SACSegmentationFromNormals<PointT, pcl::Normal> seg; 
+  pcl::PCDWriter writer;
+  pcl::PLYWriter plywriter;
+  pcl::ExtractIndices<PointT> extract;
+  pcl::ExtractIndices<pcl::Normal> extract_normals;
+  pcl::search::KdTree<PointT>::Ptr tree (new pcl::search::KdTree<PointT> ());
+
+  // Datasets
+  pcl::PointCloud<PointT>::Ptr cloud (new pcl::PointCloud<PointT>);
+  pcl::PointCloud<PointT>::Ptr cloud_filtered (new pcl::PointCloud<PointT>);
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals (new pcl::PointCloud<pcl::Normal>);
+  pcl::PointCloud<PointT>::Ptr cloud_filtered2 (new pcl::PointCloud<PointT>);
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals2 (new pcl::PointCloud<pcl::Normal>);
+  pcl::PointIndices::Ptr inliers_plane (new pcl::PointIndices), inliers_circle2d (new pcl::PointIndices), inliers_cylinder (new pcl::PointIndices);
+
+  // Read in the cloud data
+  reader.read (fn, *cloud);
+  std::cerr << "PointCloud has: " << cloud->points.size () << " data points." << std::endl;
+
+  // Build a passthrough filter to remove spurious NaNs
+  pass.setInputCloud (cloud);
+  pass.setFilterFieldName ("x");
+  pass.setFilterLimits (-0.5, 0);
+  pass.filter (*cloud_filtered);
+   
+  pass.setInputCloud (cloud_filtered);
+  pass.setFilterFieldName ("y");
+  pass.setFilterLimits (-0.5, 0);
+  pass.filter (*cloud_filtered2);
+  std::cerr << "PointCloud after filtering has: " << cloud_filtered2->points.size () << " data points." << std::endl;
+  
+  if (cloud_filtered2->points.empty ()) 
+    std::cerr << "Can't find the cloud_filtered2 component." << std::endl;
+  else
+  {
+	  std::cerr << "PointCloud representing the cloud_filtered2 component: " << cloud_filtered2->points.size () << " data points." << std::endl;
+	  //writer.write ("cloud_filtered2.pcd", *cloud_filtered2, false);
+	  plywriter.write<PointT> ("cloud_filtered2.ply", *cloud_filtered2,false,false);
+  }
+
+  // Estimate point normals
+  ne.setSearchMethod (tree);
+  ne.setInputCloud (cloud_filtered2);
+  ne.setKSearch (50);
+  ne.compute (*cloud_normals);
+
+  // Create the segmentation object for circile2d segmentation and set all the parameters
+  seg.setOptimizeCoefficients (true);
+  seg.setModelType (pcl::SACMODEL_CIRCLE2D);
+  seg.setMethodType (pcl::SAC_RANSAC);
+  seg.setNormalDistanceWeight (0);
+  seg.setMaxIterations (10);
+  seg.setDistanceThreshold (0.010);
+  seg.setRadiusLimits (0, 0.30);
+  seg.setInputCloud (cloud_filtered2);
+  seg.setInputNormals (cloud_normals);
+
+  // Obtain the circle2d inliers and coefficients
+  seg.segment (*inliers_circle2d, *coefficients_circle2d);
+  std::cerr << "circle2d coefficients: " << *coefficients_circle2d << std::endl;
+
+  // Write the circle2d inliers to disk
+  extract.setInputCloud (cloud_filtered2);
+  extract.setIndices (inliers_circle2d);
+  extract.setNegative (false);
+  pcl::PointCloud<PointT>::Ptr cloud_circle2d (new pcl::PointCloud<PointT> ());
+  extract.filter (*cloud_circle2d);
+  if (cloud_circle2d->points.empty ()) 
+    std::cerr << "Can't find the circle2d component." << std::endl;
+  else
+  {
+	  std::cerr << "PointCloud representing the circle2d component: " << cloud_circle2d->points.size () << " data points." << std::endl;
+	  //writer.write ("cloud_circle2d.pcd", *cloud_circle2d, false);
+	  plywriter.write<PointT> (outfile, *cloud_circle2d,false,false);
+  }
+  
+}
+
+
 int
+main (int argc, char** argv)
+{
+  pcl::ModelCoefficients::Ptr coefficients_circle2d (new pcl::ModelCoefficients);
+  circle2dfit("hori_1522334177262253.pcd","hori_1522334177262253_circle2d.ply",coefficients_circle2d);
+  
+  return (0);
+}
+
+/*int
 main (int argc, char** argv)
 {
   std::string fn;
@@ -21,7 +120,7 @@ main (int argc, char** argv)
   pcl::PassThrough<PointT> pass;
   pcl::NormalEstimation<PointT, pcl::Normal> ne;
   pcl::SACSegmentationFromNormals<PointT, pcl::Normal> seg; 
-  pcl::PCDWriter writer;
+  //pcl::PCDWriter writer;
   pcl::ExtractIndices<PointT> extract;
   pcl::ExtractIndices<pcl::Normal> extract_normals;
   pcl::search::KdTree<PointT>::Ptr tree (new pcl::search::KdTree<PointT> ());
@@ -78,8 +177,8 @@ main (int argc, char** argv)
   else
   {
 	  std::cerr << "PointCloud representing the circle2d component: " << cloud_circle2d->points.size () << " data points." << std::endl;
-	  writer.write ("table_scene_mug_stereo_textured_circle2d.pcd", *cloud_circle2d, false);
+	  //writer.write ("table_scene_mug_stereo_textured_circle2d.pcd", *cloud_circle2d, false);
   }
 
   return (0);
-}
+}*/
