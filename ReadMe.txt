@@ -44,3 +44,15 @@ $ rosbag play '/home/whu/laser_slam_openSources-master/hector_slam_example/data/
 --------------------------------------------------------- Burry Chen 2017.10.22
 project name =sensorpub;
 node_xsens_name=xsenspub;
+
+---------------------------------------------------------  2018.04.03
+PCL_DIR /home/whu/slam_ws/install/share/pcl-1.8
+
+
+---------------------------------------------------------  2018.04.10
+1)src/pose_estimation/pose_estimation_laser  
+3D连接点求取坐标系转换参数RT
+CMakeList.txt  list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/src/pose_estimation/cmake_modules )
+2）已知路径下第三方安装库的使用
+exp:fing_package PATHS 后面加 <path-of-PCLConfig.cmake>
+find_package(PCL 1.8 REQUIRED PATHS /home/whu/slam_ws/install/share/pcl-1.8)
