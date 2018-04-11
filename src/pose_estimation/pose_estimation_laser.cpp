@@ -103,7 +103,7 @@ int main ( int argc, char** argv )
     vector<Point3f> pts1, pts2;
     int num=0;
    
-   string workdir="/media/whu/Research/LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag_scan_ver";
+   string workdir="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag_scan_ver";
    chdir(workdir.c_str());
    ifstream inFile;
    inFile.open("data_vh.csv",ios::in);

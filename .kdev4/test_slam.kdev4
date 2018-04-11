@@ -20,7 +20,7 @@ Path=gcc
 Type=GCC
 
 [Launch]
-Launch Configurations=Launch Configuration 0,Launch Configuration 1,Launch Configuration 2,Launch Configuration 3,Launch Configuration 4
+Launch Configurations=Launch Configuration 0,Launch Configuration 1,Launch Configuration 2,Launch Configuration 3,Launch Configuration 4,Launch Configuration 5
 
 [Launch][Launch Configuration 0]
 Configured Launch Modes=execute
@@ -111,6 +111,12 @@ Project Target=test_slam,src,pose_estimation,pose_estimation_laser
 Use External Terminal=false
 Working Directory=
 isExecutable=false
+
+[Launch][Launch Configuration 5]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=New Compiled Binary Launcher
+Type=Native Application
 
 [MakeBuilder]
 Number Of Jobs=8

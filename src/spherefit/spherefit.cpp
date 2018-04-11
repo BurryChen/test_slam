@@ -200,8 +200,8 @@ main (int argc, char** argv)
    
   // experiment 2  yoga
   double R=0.325;    
-  bag_dir.push_back("/media/whu/Research/LRF_Calibation/data/linuxdata20180408/T1-L1-0-L2-0.bag");
-  bag_dir.push_back("/media/whu/Research/LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag");
+  bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T1-L1-0-L2-0.bag");
+  bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag");
   //bag_dir.push_back("/media/whu/Research/LRF_Calibation/data/linuxdata20180408/T3-L1-1-L2-0.bag");
   //bag_dir.push_back("/media/whu/Research/LRF_Calibation/data/linuxdata20180408/T4-L1-1-L2-1.bag");
   int flag[8]={-1,-1,1,1,1,-1,1,1};
@@ -314,9 +314,9 @@ main (int argc, char** argv)
   // 写文件     
   outFile.open("data_vh.csv", ios::out);   
   outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
-  ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;  
+  ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' <<
+  { "rms2" <<endl;  
   for (vector<int>::size_type i= 0; i != centers_h.size(); i ++)
-  {
     for (vector<int>::size_type j= 0; j != centers_v.size(); j ++)
     {
       long long temp=abs(centers_h[i].stamp-centers_v[j].stamp);
@@ -335,7 +335,7 @@ main (int argc, char** argv)
 
    
    //5。 transform for validation
-   bag_dir[0]="/media/whu/Research/LRF_Calibation/data/linuxdata20180408/validation.bag";
+   bag_dir[0]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/validation.bag";
    workdir=bag_dir[0]+"_scan_ver";
    //threshold[0]=-0.2,threshold[1]=0.5,threshold[2]=-1.5,threshold[3]=0;
    chdir(workdir.c_str());

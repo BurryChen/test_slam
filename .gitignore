@@ -1,3 +1,5 @@
 data/
 build/
 *.odt
+
+src/spherefit/\.CMakeLists\.txt\.kate-swp
