@@ -199,7 +199,7 @@ main (int argc, char** argv)
   string subdir;
    
   // experiment 2  yoga
-  double R=0.325;    
+  double R=0.315;    
   bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T1-L1-0-L2-0.bag");
   bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag");
   //bag_dir.push_back("/media/whu/Research/LRF_Calibation/data/linuxdata20180408/T3-L1-1-L2-0.bag");
@@ -252,7 +252,7 @@ main (int argc, char** argv)
 	  temp.y=coefficients_circle2d->values[1];
 	  temp.r=coefficients_circle2d->values[2];
 	  temp.rms=coefficients_circle2d->values[3];
-	  if(temp.r<R*0.707)	  temp.z=flag[i*2]*sqrt(R*R-temp.r*temp.r);
+	  if(temp.r<R)	  temp.z=flag[i*2]*sqrt(R*R-temp.r*temp.r);
 	  else continue;
 	  centers_h.push_back(temp);
 	  
@@ -297,7 +297,7 @@ main (int argc, char** argv)
 	  temp.y=coefficients_circle2d->values[1];
 	  temp.r=coefficients_circle2d->values[2];
 	  temp.rms=coefficients_circle2d->values[3];	  
-	  if(temp.r<R*0.707)	  temp.z=flag[i*2]*sqrt(R*R-temp.r*temp.r);
+	  if(temp.r<R/1.0)	  temp.z=flag[i*2]*sqrt(R*R-temp.r*temp.r);
 	  else continue;
 	  centers_v.push_back(temp);
 	  
@@ -314,9 +314,9 @@ main (int argc, char** argv)
   // 写文件     
   outFile.open("data_vh.csv", ios::out);   
   outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
-  ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' <<
-  { "rms2" <<endl;  
+  ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;  
   for (vector<int>::size_type i= 0; i != centers_h.size(); i ++)
+  {
     for (vector<int>::size_type j= 0; j != centers_v.size(); j ++)
     {
       long long temp=abs(centers_h[i].stamp-centers_v[j].stamp);

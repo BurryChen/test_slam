@@ -116,6 +116,7 @@ int main ( int argc, char** argv )
     num=0;
     while (getline(inFile, line))   
     {  
+        double R=0.315;
         //cout <<"原始字符串："<< line << endl; //整行输出  
         istringstream sin(line); //将整行字符串line读入到字符串流istringstream中  
         vector<string> fields; //声明一个字符串向量  
@@ -124,8 +125,9 @@ int main ( int argc, char** argv )
         {  
             fields.push_back(field); //将刚刚读取的字符串添加到向量fields中  
         }  
-        double x1=stof(fields[1].c_str()),y1 = atof(fields[2].c_str()),z1 = atof(fields[3].c_str());
-	double x2=stof(fields[7].c_str()),y2 = atof(fields[8].c_str()),z2 = atof(fields[9].c_str());
+        double x1=stof(fields[1].c_str()),y1 = atof(fields[2].c_str()),z1 = atof(fields[3].c_str()),r1 = atof(fields[4].c_str());
+	double x2=stof(fields[7].c_str()),y2 = atof(fields[8].c_str()),z2 = atof(fields[9].c_str()),r2 = atof(fields[10].c_str());
+	if(r1<R*0.707&&r2<R*0.707)  continue;
 
 	Point3f p1(x1,y1,z1);
         Point3f p2(x2,y2,z2);
@@ -194,8 +196,10 @@ int main ( int argc, char** argv )
         outFile<<endl;
 	
 	Mat temp=R * (Mat_<double>(3,1)<<pts2[i].x, pts2[i].y, pts2[i].z) + t - (Mat_<double>(3,1)<<pts1[i].x, pts1[i].y, pts1[i].z);
+	double Eucd=sqrt(temp.at<double>(0,0)*temp.at<double>(0,0)+temp.at<double>(1,0)*temp.at<double>(1,0)
+	+temp.at<double>(2,0)*temp.at<double>(2,0));
 	resFile<<//pts1[i]<<pts2[i]<< R * (Mat_<double>(3,1)<<pts2[i].x, pts2[i].y, pts2[i].z) + t<<
-           temp.at<double>(0,0)<<","<<temp.at<double>(1,0)<<","<<temp.at<double>(2,0)<<endl;
+           temp.at<double>(0,0)<<","<<temp.at<double>(1,0)<<","<<temp.at<double>(2,0)<<","<<Eucd<<endl;
     }
     
     
