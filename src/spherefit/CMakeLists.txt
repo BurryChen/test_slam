@@ -2,8 +2,8 @@
 # 
 # project(spherefit)
 
-#find_package(PCL 1.8 REQUIRED )
-find_package(PCL 1.8 REQUIRED PATHS /home/whu/slam_ws/install/share/pcl-1.8)
+find_package(PCL 1.7 REQUIRED )
+#find_package(PCL 1.8 REQUIRED PATHS /home/whu/slam_ws/install/share/pcl-1.8)
 
 include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
