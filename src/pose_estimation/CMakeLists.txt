@@ -38,12 +38,12 @@ include_directories(
 #   g2o_core g2o_stuff g2o_types_sba g2o_csparse_extension
 #)
 
-#add_executable( pose_estimation_3d3d pose_estimation_laser.cpp )
-#target_link_libraries( pose_estimation_3d3d 
-#   ${OpenCV_LIBS}
-#   g2o_core g2o_stuff g2o_types_sba g2o_csparse_extension 
-#   ${CSPARSE_LIBRARY}
-#)
+add_executable( pose_estimation_3d3d pose_estimation_3d3d.cpp )
+target_link_libraries( pose_estimation_3d3d 
+   ${OpenCV_LIBS}
+   g2o_core g2o_stuff g2o_types_sba g2o_csparse_extension 
+   ${CSPARSE_LIBRARY}
+)
 
 add_executable( pose_estimation_laser pose_estimation_laser.cpp )
 target_link_libraries( pose_estimation_laser 
@@ -52,7 +52,7 @@ target_link_libraries( pose_estimation_laser
    ${CSPARSE_LIBRARY}
 )
 
-install(TARGETS  pose_estimation_laser #cylinder_segmentation
+install(TARGETS  pose_estimation_3d3d pose_estimation_laser 
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

@@ -52,17 +52,12 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 #target_link_libraries(add_two_ints_client ${catkin_LIBRARIES})
 #add_dependencies(add_two_ints_client test_slam_gencpp)
 
-# add_executable(port src/port.cpp)
-# target_link_libraries(port ${catkin_LIBRARIES})
-# 
+
 # add_executable(odometry src/odometry.cpp)
 # target_link_libraries(odometry ${catkin_LIBRARIES})
 # 
 # add_executable(imuPAGS src/imuPAGS.cpp)
 # target_link_libraries(imuPAGS ${catkin_LIBRARIES})
-
- add_subdirectory(src)
-
 
 #install(TARGETS  hello
 #  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -70,7 +65,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 #  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 #)
 
-
-
+ add_subdirectory(src)
+# add_subdirectory(slambook_gx/ch7)
 
 
