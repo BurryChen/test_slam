@@ -44,6 +44,27 @@ $ rosbag play '/home/whu/laser_slam_openSources-master/hector_slam_example/data/
 --------------------------------------------------------- Burry Chen 2017.10.22
 project name =sensorpub;
 node_xsens_name=xsenspub;
+------------------------------------------    20170327
+1、linux git 下文件拷入拷出
+git config  core.fileMode false
+
+------------------------------------------   20170327
+1、cmake 指定目录
+/usr/bin/cmake -DCMAKE_INSTALL_PREFIX=/home/whu/slam_ws/install -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCATKIN_DEVEL_PREFIX=/home/whu/slam_ws/devel -DCMAKE_INSTALL_PREFIX=/home/whu/slam_ws/install /home/whu/slam_ws/src/VeloView/
+
+    cd pcl  
+    mkdir build  
+    cd build  
+    cmake -DCATKIN_DEVEL_PREFIX=/home/whu/slam_ws/devel -DCMAKE_INSTALL_PREFIX=/home/whu/slam_ws/install ..  
+    sudo make install  
+
+2、catkin_make 指定安装目录
+catkin_make  -DCATKIN_DEVEL_PREFIX=/home/whu/slam_ws/devel -DCMAKE_INSTALL_PREFIX=/home/whu/slam_ws/install install
+
+catkin_make  -DCATKIN_DEVEL_PREFIX=/home/whu/slam_ws/devel -DCMAKE_INSTALL_PREFIX=/usr/local install
+
+---------------------------------------20180504
+#find_package(PCL 1.8 REQUIRED COMPONENTS common io PATHS /home/whu/slam_ws/install/share/pcl-1.8) 
 
 ---------------------------------------------------------  2018.04.03
 PCL_DIR /home/whu/slam_ws/install/share/pcl-1.8
