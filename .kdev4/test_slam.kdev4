@@ -20,11 +20,7 @@ Path=gcc
 Type=GCC
 
 [Launch]
-<<<<<<< Updated upstream
-Launch Configurations=Launch Configuration 0,Launch Configuration 1,Launch Configuration 2,Launch Configuration 3,Launch Configuration 4,Launch Configuration 5
-=======
 Launch Configurations=Launch Configuration 0,Launch Configuration 1,Launch Configuration 2,Launch Configuration 3,Launch Configuration 4,Launch Configuration 5,Launch Configuration 6,Launch Configuration 7
->>>>>>> Stashed changes
 
 [Launch][Launch Configuration 0]
 Configured Launch Modes=execute
@@ -122,18 +118,16 @@ Configured Launchers=nativeAppLauncher
 Name=New Compiled Binary Launcher
 Type=Native Application
 
-<<<<<<< Updated upstream
-=======
 [Launch][Launch Configuration 5][Data]
-Arguments=
+Arguments=-input  ./problem-16-22106-pre.txt
 Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x04\x00\x00\x00\x12\x00t\x00e\x00s\x00t\x00_\x00s\x00l\x00a\x00m\x00\x00\x00\x06\x00s\x00r\x00c\x00\x00\x00 \x00g\x002\x00o\x00_\x00c\x00u\x00s\x00t\x00o\x00m\x00b\x00u\x00n\x00d\x00l\x00e\x00\x00\x00 \x00g\x002\x00o\x00_\x00c\x00u\x00s\x00t\x00o\x00m\x00B\x00u\x00n\x00d\x00l\x00e)
 Dependency Action=Build
 EnvironmentGroup=
 Executable=file:///home/whu/slam_ws/devel/lib/test_slam/g2o_customBundle
 External Terminal=konsole --noclose --workdir %workdir -e %exe
-Project Target=test_slam,src,g2o_custombundle,g2o_customBundle
+Project Target=
 Use External Terminal=false
-Working Directory=
+Working Directory=file:///home/whu/slam_ws/devel/lib/test_slam
 isExecutable=true
 
 [Launch][Launch Configuration 6]
@@ -161,18 +155,17 @@ Name=ceres_customBundle
 Type=Native Application
 
 [Launch][Launch Configuration 7][Data]
-Arguments=
+Arguments=-input  ./problem-16-22106-pre.txt
 Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x04\x00\x00\x00\x12\x00t\x00e\x00s\x00t\x00_\x00s\x00l\x00a\x00m\x00\x00\x00\x06\x00s\x00r\x00c\x00\x00\x00$\x00c\x00e\x00r\x00e\x00s\x00_\x00c\x00u\x00s\x00t\x00o\x00m\x00b\x00u\x00n\x00d\x00l\x00e\x00\x00\x00$\x00c\x00e\x00r\x00e\x00s\x00_\x00c\x00u\x00s\x00t\x00o\x00m\x00B\x00u\x00n\x00d\x00l\x00e)
 Dependency Action=Build
 EnvironmentGroup=default
 Executable=file:///home/whu/slam_ws/devel/lib/test_slam/ceres_customBundle
 External Terminal=konsole --noclose --workdir %workdir -e %exe
-Project Target=test_slam,src,ceres_custombundle,ceres_customBundle
+Project Target=
 Use External Terminal=false
-Working Directory=
+Working Directory=file:///home/whu/slam_ws/devel/lib/test_slam
 isExecutable=true
 
->>>>>>> Stashed changes
 [MakeBuilder]
 Number Of Jobs=8
 
