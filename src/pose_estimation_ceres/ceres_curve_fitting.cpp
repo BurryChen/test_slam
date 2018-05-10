@@ -70,6 +70,7 @@ int main ( int argc, char** argv )
 
     // 输出结果
     cout<<summary.BriefReport() <<endl;
+    cout<<summary.FullReport() <<endl;
     cout<<"estimated a,b,c = ";
     for ( auto a:abc ) cout<<a<<" ";
     cout<<endl;
