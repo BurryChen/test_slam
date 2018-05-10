@@ -3,10 +3,11 @@
 
 #set( CMAKE_BUILD_TYPE "Release" )
 set( CMAKE_BUILD_TYPE "Debug" )
-set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )
+#set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )
+set( CMAKE_CXX_FLAGS "-std=c++11" )
 
 # 添加cmake模块以使用g2o
-list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/src/pose_estimation/cmake_modules )
+list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/src/pose_estimation_g2o/cmake_modules )
 
 #find_package( OpenCV 3.1 REQUIRED )
 find_package( OpenCV REQUIRED ) # use this if in OpenCV2 
@@ -45,14 +46,14 @@ include_directories(
 #   ${CSPARSE_LIBRARY}
 #)
 
-add_executable( pose_estimation_laser pose_estimation_laser.cpp )
-target_link_libraries( pose_estimation_laser 
+add_executable( pose_estimation_g2o pose_estimation_g2o.cpp )
+target_link_libraries( pose_estimation_g2o 
    ${OpenCV_LIBS}
    g2o_core g2o_stuff g2o_types_sba g2o_csparse_extension 
    ${CSPARSE_LIBRARY}
 )
 
-install(TARGETS  pose_estimation_laser #cylinder_segmentation
+install(TARGETS  pose_estimation_g2o 
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

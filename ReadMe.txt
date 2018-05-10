@@ -77,3 +77,8 @@ CMakeList.txt  list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/src/pose_est
 2）已知路径下第三方安装库的使用
 exp:fing_package PATHS 后面加 <path-of-PCLConfig.cmake>
 find_package(PCL 1.8 REQUIRED PATHS /home/whu/slam_ws/install/share/pcl-1.8)
+
+-------------------------------------------------------   2018.05.10
+lib example 不再加入工程中， build 及debug 全在下载source中进行，debug 使用gdb工具
+cmake -DCMAKE_BUILD_TYPE=Debug .. 
+cmakelist中#set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )  不能为O3,优化层度太高，无debug信息
