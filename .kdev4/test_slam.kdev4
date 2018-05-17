@@ -8,7 +8,7 @@ ProjectRootRelative=./
 
 [CMake][CMake Build Directory 0]
 Build Directory Path=file:///home/whu/slam_ws/build/test_slam
-Build Type=Release
+Build Type=Debug
 CMake Binary=file:///usr/bin/cmake
 Environment Profile=
 Extra Arguments=-DCATKIN_DEVEL_PREFIX=/home/whu/slam_ws/devel -DCMAKE_INSTALL_PREFIX=/home/whu/slam_ws/install
@@ -20,7 +20,7 @@ Path=gcc
 Type=GCC
 
 [Launch]
-Launch Configurations=Launch Configuration 0,Launch Configuration 1,Launch Configuration 2,Launch Configuration 5,Launch Configuration 3
+Launch Configurations=Launch Configuration 0,Launch Configuration 2,Launch Configuration 5,Launch Configuration 3,Launch Configuration 1
 
 [Launch][Launch Configuration 0]
 Configured Launch Modes=execute
@@ -43,20 +43,20 @@ isExecutable=false
 [Launch][Launch Configuration 1]
 Configured Launch Modes=execute
 Configured Launchers=nativeAppLauncher
-Name=spherefit
+Name=spherefit_pointcloud
 Type=Native Application
 
 [Launch][Launch Configuration 1][Data]
 Arguments=
-Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
-Dependency Action=Nothing
-EnvironmentGroup=default
-Executable=file:///home/whu/slam_ws/src/test_slam/
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x04\x00\x00\x00\x12\x00t\x00e\x00s\x00t\x00_\x00s\x00l\x00a\x00m\x00\x00\x00\x06\x00s\x00r\x00c\x00\x00\x00\x12\x00s\x00p\x00h\x00e\x00r\x00e\x00f\x00i\x00t\x00\x00\x00(\x00s\x00p\x00h\x00e\x00r\x00e\x00f\x00i\x00t\x00_\x00p\x00o\x00i\x00n\x00t\x00c\x00l\x00o\x00u\x00d)
+Dependency Action=Build
+EnvironmentGroup=
+Executable=file:///home/whu/slam_ws/devel/lib/test_slam/spherefit_pointcloud
 External Terminal=konsole --noclose --workdir %workdir -e %exe
-Project Target=test_slam,src,spherefit,spherefit
+Project Target=test_slam,src,spherefit,spherefit_pointcloud
 Use External Terminal=false
 Working Directory=
-isExecutable=false
+isExecutable=true
 
 [Launch][Launch Configuration 2]
 Configured Launch Modes=execute

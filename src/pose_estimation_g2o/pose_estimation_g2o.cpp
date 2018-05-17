@@ -97,11 +97,13 @@ int main ( int argc, char** argv )
    
    string workdir="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag_scan_ver";
    chdir(workdir.c_str());
-   ifstream inFile;
+   ifstream inFile; 
    inFile.open("data_vh.csv",ios::in);
-   ofstream outFile;
+   ofstream outFile,outFile2;
    outFile.open("result.log", ios::out);  
- 
+    
+   outFile2.open("data_vh_seleted.csv", ios::out);   
+   outFile2  << "num"<<','<<"x1" << ',' << "y1" << ',' << "z1" << ',' <<  "x2" << ',' << "y2" << ',' <<"z2"<<endl;  
    string line; 
    //整行读取，换行符“\n”区分，遇到文件尾标志eof终止读取 ,第一行跳过
     getline(inFile, line);
@@ -126,7 +128,8 @@ int main ( int argc, char** argv )
         pts1.push_back ( p1);
         pts2.push_back ( p2); 
 	num++;
-        cout <<"corresponding-"<<num<< ":\t"<< x1 << "\t" << y1 << "\t" << z1 << "\t"<<x2<< "\t" << y2 << "\t" << z2 << endl;   
+        cout <<"corresponding-"<<num<< ":\t"<< x1 << "\t" << y1 << "\t" << z1 << "\t"<<x2<< "\t" << y2 << "\t" << z2 << endl; 
+        outFile2 << num << ','  << x1<< ','<< y1 << ',' << z1<< ',' << x2<< ',' << y2 << ',' << z2 << endl;  
     }
 
     cout<<"3d-3d pairs: "<<pts1.size() <<endl;
