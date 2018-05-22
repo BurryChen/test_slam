@@ -14,6 +14,8 @@
 #include <pcl/common/transforms.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include "Eigen/Dense"
+#include <Eigen/Core>
+#include <Eigen/Geometry>
 using namespace Eigen;
 
 #include <dirent.h>//遍历系统指定目录下文件要包含的头文件
@@ -25,6 +27,12 @@ using namespace Eigen;
 #include <sstream> 
 #include <unistd.h>
 using namespace std;
+
+#include <pcl/registration/correspondence_rejection_sample_consensus.h>
+#include <pcl/registration/transformation_estimation_svd.h>
+#include <pcl/common/distances.h>
+
+#define Sign(y) (y>=0?1:-1)
 
 typedef pcl::PointXYZ PointT;
 
@@ -179,9 +187,64 @@ int transform(std::string infile,std::string outfile)
   //std::cout << transform << std::endl;
   
   // Executing the transformation
-  pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_cloud (new pcl::PointCloud<pcl::PointXYZ> ());
+  pcl::PointCloud<pcl::PointXYZ>::Ptr transformed_cloud (new pcl::PointCloud<PointT> ());
   pcl::transformPointCloud (*cloud, *transformed_cloud, transform);
   plywriter.write<PointT> (outfile+"_transformed.ply", *transformed_cloud,false,false); 
+}
+
+bool LessSort (float a,float b) { return (a<b); }  
+void precalZsign(pcl::PointCloud<PointT>::Ptr source,pcl::PointCloud<PointT>::Ptr target,
+		 pcl::Correspondences& correspondences)
+{
+  double sign[4][2]={1,1,1,-1,-1,1,-1,-1};
+  int base=55;
+  int count_success=0;
+  PointT s_base=source->points[base],t_base=target->points[base];   //base point
+  pcl::Correspondences temp_correspondences=correspondences;
+  for (int i= 0;  i< correspondences.size(); i ++)
+  //for(pcl::Correspondences::iterator iter:correspondences)
+  {
+    if(i==base)continue;
+    int index_query=correspondences[i].index_query;
+    int index_match=correspondences[i].index_match;
+   
+    //calculate sign by min distance
+    PointT p_s,p_t;
+    double d_min=999,d_temp;
+    vector<float> v_d;
+    for(int j=0;j<4;j++)
+    {
+      PointT temp_s=source->points[index_query];
+      PointT temp_t=target->points[index_match];
+      temp_s.z=sign[j][0]*fabs(temp_s.z),temp_t.z=sign[j][1]*fabs(temp_t.z); 
+      double temp_d1=pcl::euclideanDistance<PointT>(temp_s,s_base);
+      double temp_d2=pcl::euclideanDistance<PointT>(temp_t,t_base);
+
+      d_temp=fabs(temp_d1-temp_d2);
+      v_d.push_back(d_temp);
+      if(d_temp<d_min)
+      {
+	d_min=d_temp;p_s=temp_s;p_t=temp_t;
+      }
+    }
+    std::sort(v_d.begin(),v_d.end(),LessSort);
+    if(d_min>0.02) 
+    {
+      temp_correspondences.erase(temp_correspondences.begin()+i);continue;
+    }
+    else if(pcl::euclideanDistance<PointT>(p_s,source->points[index_query])==0
+      &&pcl::euclideanDistance<PointT>(p_t,target->points[index_match])==0)
+    {     
+      count_success++;
+      cout<<"precalZsign success "<<i<<endl; 
+    }
+    
+    //uodate corresponces points;
+    source->points[index_query]=p_s;
+    target->points[index_match]=p_t;
+  }
+  correspondences=temp_correspondences;
+  cout<<"count_success"<<count_success+1<<" in the correspondences "<<correspondences.size()<<endl;
 }
 
 int
@@ -246,7 +309,7 @@ main (int argc, char** argv)
 	  cout<<temp1<<endl;
 	  pcl::ModelCoefficients::Ptr coefficients_circle2d (new pcl::ModelCoefficients);
 	  circle2dfit(temp1,temp2,coefficients_circle2d,threshold[2*i]);
-	  if(coefficients_circle2d->values.size()==0) continue;
+	  if(coefficients_circle2d->values.size()==0 ||coefficients_circle2d->values[2]>R*0.707) continue;
 	  
 	  temp.x=coefficients_circle2d->values[0];
 	  temp.y=coefficients_circle2d->values[1];
@@ -291,7 +354,7 @@ main (int argc, char** argv)
 	  cout<<temp1<<endl;
 	  pcl::ModelCoefficients::Ptr coefficients_circle2d (new pcl::ModelCoefficients);
 	  circle2dfit(temp1,temp2,coefficients_circle2d,threshold[2*i+1]);
-	  if(coefficients_circle2d->values.size()==0) continue;
+	  if(coefficients_circle2d->values.size()==0||coefficients_circle2d->values[2]>R*0.707) continue;
 	  
 	  temp.x=coefficients_circle2d->values[0];
 	  temp.y=coefficients_circle2d->values[1];
@@ -310,32 +373,75 @@ main (int argc, char** argv)
     outFile.close();       
   }
   
+  // Fill in the cloud data  
+  pcl::Correspondences all_correspondences ,good_correspondences ;
+  pcl::PointCloud<PointT>::Ptr keypoints_v(new pcl::PointCloud<PointT>);
+  pcl::PointCloud<PointT>::Ptr keypoints_h(new pcl::PointCloud<PointT>); 
+  keypoints_h->width    = centers_h.size();
+  keypoints_h->height   = 1;
+  keypoints_h->is_dense = false;
+  keypoints_h->points.resize (keypoints_h->width * keypoints_h->height);
+  for (vector<int>::size_type num_keypoints= 0; num_keypoints!= centers_h.size(); num_keypoints ++)
+  {
+    keypoints_h->points[num_keypoints].x=centers_h[num_keypoints].x;
+    keypoints_h->points[num_keypoints].y=centers_h[num_keypoints].y;
+    keypoints_h->points[num_keypoints].z=centers_h[num_keypoints].z;
+    //keypoints_h->points[num_keypoints].label=centers_h[num_keypoints].rms;
+  }
+  keypoints_v->width    = centers_v.size();
+  keypoints_v->height   = 1;
+  keypoints_v->is_dense = false;
+  keypoints_v->points.resize (keypoints_v->width * keypoints_v->height);
+  for (vector<int>::size_type num_keypoints= 0; num_keypoints!= centers_v.size(); num_keypoints ++)
+  {
+    keypoints_v->points[num_keypoints].x=centers_v[num_keypoints].x;
+    keypoints_v->points[num_keypoints].y=centers_v[num_keypoints].y;
+    keypoints_v->points[num_keypoints].z=centers_v[num_keypoints].z;
+    //keypoints_v->points[num_keypoints].label=centers_v[num_keypoints].rms;
+  } 
+  
   //4、时间戳对应
   // 写文件     
   outFile.open("data_vh.csv", ios::out);   
   outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
   ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;  
-  for (vector<int>::size_type i= 0; i != centers_h.size(); i ++)
+  for (vector<int>::size_type j= 0; j != centers_v.size(); j ++)
   {
-    for (vector<int>::size_type j= 0; j != centers_v.size(); j ++)
+    for (vector<int>::size_type i= 0; i != centers_h.size(); i ++)
     {
       long long temp=abs(centers_h[i].stamp-centers_v[j].stamp);
-      //40HZ,0.025s,
       if(temp<25000/2)
-      {
-	
+      {	
 	outFile << centers_h[i].stamp << ','  << centers_h[i].x<< ','<< centers_h[i].y << ',' << centers_h[i].z<< ',' 
 	<< centers_h[i].r<< ',' << centers_h[i].rms
 	<< ',' <<centers_v[j].stamp << ',' << centers_v[j].x<< ',' << centers_v[j].y << ',' << centers_v[j].z << ','
-	<< centers_v[j].r<< ',' << centers_v[j].rms<< endl;  
+	<< centers_v[j].r<< ',' << centers_v[j].rms<< endl; 
+	
+	pcl::Correspondence corr;
+	corr.index_query = j;corr.index_match = i;corr.distance = 1;
+	all_correspondences.push_back(corr);
       }	
     }
   }
   outFile.close();
-
-   
-   //5。 transform for validation
-   bag_dir[0]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/validation.bag";
+  
+  //pre calculate Z sign in correspondences
+  //precalZsign(keypoints_v,keypoints_h,all_correspondences);
+  
+  cout<<"all_correspondences.size()="<<all_correspondences.size()<<endl;
+  pcl::registration::CorrespondenceRejectorSampleConsensus<PointT> rej;
+  rej.setInputSource(keypoints_v);
+  rej.setInputTarget(keypoints_h);
+  rej.setMaximumIterations(10000);
+  rej.setInlierThreshold(0.01);
+  rej.getRemainingCorrespondences(all_correspondences,good_correspondences); 
+  Eigen::Matrix4f pose=rej.getBestTransformation();
+  cout<<"good_correspondences.size()="<<good_correspondences.size()<<endl;
+  cout<<" after rej.setInlierThreshold(0.01),rej.getBestTransformation() results: "<<endl;
+  cout<<"pose = "<<pose<<endl;
+  
+   //5.transform for validation
+   /*bag_dir[0]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/validation.bag";
    workdir=bag_dir[0]+"_scan_ver";
    //threshold[0]=-0.2,threshold[1]=0.5,threshold[2]=-1.5,threshold[3]=0;
    chdir(workdir.c_str());
@@ -358,9 +464,8 @@ main (int argc, char** argv)
 
 	}
     }   
-    closedir(pdir); 
+    closedir(pdir); */
    
-  
   return (0);
 }
 

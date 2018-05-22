@@ -26,6 +26,9 @@ using namespace Eigen;
 #include <unistd.h>
 using namespace std;
 
+#include <pcl/registration/correspondence_rejection_sample_consensus.h>
+#include <pcl/registration/transformation_estimation_svd.h>
+
 typedef pcl::PointXYZ PointT;
 
 typedef struct center {
@@ -191,8 +194,8 @@ main (int argc, char** argv)
   dirent* p = NULL;
   ofstream outFile;
   vector <Center> centers_h,centers_v;
+  
   char * tmp = new char[100];
-  //double *threshold=new double[4];
   string subdir;
    
   // experiment 2  yoga
@@ -219,6 +222,7 @@ main (int argc, char** argv)
     outFile.open("data_h.csv", ios::out);  
     outFile << "stamp" << ',' << "x" << ',' << "y" << ',' << "z" << ',' <<"r" << ',' << "rms" <<endl;  
 
+    int num_keypoints=0;
     while((p = readdir(pdir)) != NULL)
     {
 	//这里需要注意，linux平台下一个目录中有"."和".."隐藏文件，需要过滤掉
@@ -243,10 +247,9 @@ main (int argc, char** argv)
 
 	  centers_h.push_back(temp);	  
 	  cout<<temp.stamp << ',' << temp.x<< ',' << temp.y << ','<<temp.z << ',' << temp.r<< ',' << temp.rms<<endl<<endl;
-	  outFile << temp.stamp << ',' << temp.x<< ',' << temp.y << ',' << temp.z << ','<<temp.r<< ',' << temp.rms<< endl;        
+	  outFile << temp.stamp << ',' << temp.x<< ',' << temp.y << ',' << temp.z << ','<<temp.r<< ',' << temp.rms<< endl;  	 
 	}
-    }
-    
+    }    
     closedir(pdir);  
     outFile.close();
       
@@ -263,6 +266,7 @@ main (int argc, char** argv)
     outFile.open("data_v.csv", ios::out);   
     outFile << "stamp" << ',' << "x" << ',' << "y" << ',' << "z" << ',' <<"r" << ',' << "rms" <<endl;  
     
+    num_keypoints=0;
     while((p = readdir(pdir)) != NULL)
     {
 	//这里需要注意，linux平台下一个目录中有"."和".."隐藏文件，需要过滤掉
@@ -287,36 +291,77 @@ main (int argc, char** argv)
 	  centers_v.push_back(temp);
 	  
 	  cout<<temp.stamp << ',' << temp.x<< ',' << temp.y << ','<<temp.z << ',' << temp.r<< ',' << temp.rms<<endl<<endl;
-	  outFile << temp.stamp << ',' << temp.x<< ',' << temp.y << ',' << temp.z << ','<<temp.r<< ',' << temp.rms<< endl; 	  
+	  outFile << temp.stamp << ',' << temp.x<< ',' << temp.y << ',' << temp.z << ','<<temp.r<< ',' << temp.rms<< endl; 
 	}
     }  
     closedir(pdir);  
     outFile.close();       
   }
-  
+ 
+  // Fill in the cloud data  
+  pcl::Correspondences all_correspondences ,good_correspondences ;
+  pcl::PointCloud<PointT>::Ptr keypoints_v(new pcl::PointCloud<PointT>);
+  pcl::PointCloud<PointT>::Ptr keypoints_h(new pcl::PointCloud<PointT>); 
+  keypoints_h->width    = centers_h.size();
+  keypoints_h->height   = 1;
+  keypoints_h->is_dense = false;
+  keypoints_h->points.resize (keypoints_h->width * keypoints_h->height);
+  for (vector<int>::size_type num_keypoints= 0; num_keypoints!= centers_h.size(); num_keypoints ++)
+  {
+    keypoints_h->points[num_keypoints].x=centers_h[num_keypoints].x;
+    keypoints_h->points[num_keypoints].y=centers_h[num_keypoints].y;
+    keypoints_h->points[num_keypoints].z=centers_h[num_keypoints].z;
+    //keypoints_h->points[num_keypoints].label=centers_h[num_keypoints].rms;
+  }
+  keypoints_v->width    = centers_v.size();
+  keypoints_v->height   = 1;
+  keypoints_v->is_dense = false;
+  keypoints_v->points.resize (keypoints_v->width * keypoints_v->height);
+  for (vector<int>::size_type num_keypoints= 0; num_keypoints!= centers_v.size(); num_keypoints ++)
+  {
+    keypoints_v->points[num_keypoints].x=centers_v[num_keypoints].x;
+    keypoints_v->points[num_keypoints].y=centers_v[num_keypoints].y;
+    keypoints_v->points[num_keypoints].z=centers_v[num_keypoints].z;
+    //keypoints_v->points[num_keypoints].label=centers_v[num_keypoints].rms;
+  }
   //4、时间戳对应
-  // 写文件     
+  // 写文件  
   outFile.open("data_vh.csv", ios::out);   
   outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
   ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;  
-  for (vector<int>::size_type i= 0; i != centers_h.size(); i ++)
+  for (vector<int>::size_type j= 0; j != centers_v.size(); j ++)
   {
-    for (vector<int>::size_type j= 0; j != centers_v.size(); j ++)
+    for (vector<int>::size_type i= 0; i != centers_h.size(); i ++)
     {
       long long temp=abs(centers_h[i].stamp-centers_v[j].stamp);
       //10HZ,0.1s,
       if(temp<100000/2)
-      {	
+      {
 	outFile << centers_h[i].stamp << ','  << centers_h[i].x<< ','<< centers_h[i].y << ',' << centers_h[i].z<< ',' 
 	<< centers_h[i].r<< ',' << centers_h[i].rms
 	<< ',' <<centers_v[j].stamp << ',' << centers_v[j].x<< ',' << centers_v[j].y << ',' << centers_v[j].z << ','
 	<< centers_v[j].r<< ',' << centers_v[j].rms<< endl;  
+	
+        pcl::Correspondence corr;
+	corr.index_query = j;corr.index_match = i;corr.distance = 1;
+	all_correspondences.push_back(corr);
       }	
     }
   }
   outFile.close();
-
-   
+  
+  cout<<"all_correspondences.size()="<<all_correspondences.size()<<endl;
+  pcl::registration::CorrespondenceRejectorSampleConsensus<PointT> rej;
+  rej.setInputSource(keypoints_v);
+  rej.setInputTarget(keypoints_h);
+  rej.setMaximumIterations(10000);
+  rej.setInlierThreshold(0.03);
+  rej.getRemainingCorrespondences(all_correspondences,good_correspondences); 
+  Eigen::Matrix4f pose=rej.getBestTransformation();
+  cout<<"good_correspondences.size()="<<good_correspondences.size()<<endl;
+  cout<<" after rej.setInlierThreshold(0.03),rej.getBestTransformation() results: "<<endl;
+  cout<<"pose = "<<pose<<endl;
+    
    //5。 transform for validation
    /*bag_dir[0]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/validation.bag";
    workdir=bag_dir[0]+"_scan_ver";
@@ -342,8 +387,7 @@ main (int argc, char** argv)
 	}
     }   
     closedir(pdir);*/
-   
-  
+    
   return (0);
 }
 

@@ -17,9 +17,3 @@ target_link_libraries (spherefit_scan ${PCL_LIBRARIES})
 
 add_executable (spherefit_pointcloud spherefit_pointcloud.cpp)
 target_link_libraries (spherefit_pointcloud ${PCL_LIBRARIES})
-
-install(TARGETS  spherefit_scan spherefit_pointcloud #cylinder_segmentation
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)

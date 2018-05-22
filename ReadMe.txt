@@ -82,3 +82,6 @@ find_package(PCL 1.8 REQUIRED PATHS /home/whu/slam_ws/install/share/pcl-1.8)
 lib example 不再加入工程中， build 及debug 全在下载source中进行，debug 使用gdb工具
 cmake -DCMAKE_BUILD_TYPE=Debug .. 
 cmakelist中#set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )  不能为O3,优化层度太高，无debug信息
+-------------------------------------------------------   2018.5.20
+gdb run（简写r）：执行程序
+(gdb)run app [argv1] [argv2] ...
