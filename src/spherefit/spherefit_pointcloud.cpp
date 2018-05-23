@@ -28,6 +28,8 @@ using namespace std;
 
 #include <pcl/registration/correspondence_rejection_sample_consensus.h>
 #include <pcl/registration/transformation_estimation_svd.h>
+using namespace pcl;
+using namespace pcl::registration;
 
 typedef pcl::PointXYZ PointT;
 
@@ -43,7 +45,8 @@ int spherefit(std::string infile,std::string outfile, pcl::ModelCoefficients::Pt
   pcl::PCDReader reader;
   pcl::PassThrough<PointT> pass;
   pcl::NormalEstimation<PointT, pcl::Normal> ne;
-  pcl::SACSegmentationFromNormals<PointT, pcl::Normal> seg; 
+  pcl::SACSegmentationFromNormals<PointT, pcl::Normal> segfromnorml; 
+  pcl::SACSegmentation<PointT> seg; 
   pcl::PCDWriter writer;
   pcl::PLYWriter plywriter;
   pcl::ExtractIndices<PointT> extract;
@@ -84,31 +87,39 @@ int spherefit(std::string infile,std::string outfile, pcl::ModelCoefficients::Pt
   }
   else
   {
-    //std::cerr << "PointCloud representing the cloud_filtered2 component: " << cloud_filtered2->points.size () << " data points." << std::endl;
     //writer.write ("cloud_filtered2.pcd", *cloud_filtered2, false);         
     plywriter.write<PointT> (outfile+"_filtered2.ply", *cloud_filtered2,false,false);
   }
   
+  // Create the segmentation object for circile2d segmentation and set all the parameters
   // Estimate point normals
-  ne.setSearchMethod (tree);
+  /*ne.setSearchMethod (tree);
   ne.setInputCloud (cloud_filtered2);
   ne.setKSearch (50);
   ne.compute (*cloud_normals);
 
   // Create the segmentation object for circile2d segmentation and set all the parameters
+  segfromnorml.setOptimizeCoefficients (true);
+  segfromnorml.setModelType (pcl::SACMODEL_SPHERE);
+  segfromnorml.setMethodType (pcl::SAC_RANSAC);
+  segfromnorml.setNormalDistanceWeight (0);
+  segfromnorml.setMaxIterations (10000);
+  segfromnorml.setDistanceThreshold (0.03);
+  segfromnorml.setRadiusLimits (0.45, 0.55);
+  segfromnorml.setInputCloud (cloud_filtered2);
+  segfromnorml.setInputNormals (cloud_normals);
+  segfromnorml.segment (*inliers_sphere, *coefficients_sphere);*/
+  
   seg.setOptimizeCoefficients (true);
   seg.setModelType (pcl::SACMODEL_SPHERE);
   seg.setMethodType (pcl::SAC_RANSAC);
-  seg.setNormalDistanceWeight (0);
   seg.setMaxIterations (10000);
   seg.setDistanceThreshold (0.030);
-  seg.setRadiusLimits (0.30, 0.40);
-  seg.setInputCloud (cloud_filtered2);
-  seg.setInputNormals (cloud_normals);
-
+  seg.setRadiusLimits (0.45, 0.55);
+  seg.setInputCloud (cloud_filtered2);  
   // Obtain the sphere inliers and coefficients
   seg.segment (*inliers_sphere, *coefficients_sphere);
-
+  
   // Write the sphere inliers to disk
   extract.setInputCloud (cloud_filtered2);
   extract.setIndices (inliers_sphere);
@@ -117,7 +128,7 @@ int spherefit(std::string infile,std::string outfile, pcl::ModelCoefficients::Pt
   extract.filter (*cloud_sphere);
   if (cloud_sphere->points.size()<50) 
   {
-    std::cerr << "The sphere poiny size less than 50." << std::endl;
+    std::cerr << "The sphere point size less than 50." << std::endl;
     coefficients_sphere->values.clear();
   } 
   else
@@ -143,7 +154,7 @@ int spherefit(std::string infile,std::string outfile, pcl::ModelCoefficients::Pt
     double rms = sqrt(accum/(residual.size()-1)); //RMS  
     coefficients_sphere->values.push_back(rms);
   }
-  std::cerr << "sphere coefficients: " << *coefficients_sphere << std::endl;
+  //std::cerr << "sphere coefficients: " << *coefficients_sphere << std::endl;
 }
 
 int transform(std::string infile,std::string outfile)
@@ -198,12 +209,14 @@ main (int argc, char** argv)
   char * tmp = new char[100];
   string subdir;
    
-  // experiment 2  yoga
-  double R=0.315;    
-  bag_dir.push_back("/home/whu/data/whuplat/VLP16/_2018-05-04-18-39-10.bag");
-  double threshold[2][4]={
-       -0.1,0.7,-1.4,-0.6,
-       -0.4,0.4,-1.4,-0.6,    
+  // experiment 2  yoga  
+  bag_dir.push_back("/home/whu/data/whuplat/VLP16/_2018-05-22-21-56-22.bag");
+  bag_dir.push_back("/home/whu/data/whuplat/VLP16/_2018-05-22-21-58-35.bag");
+  double threshold[4][4]={
+       -1,1,-4,0,
+       -1,1,-4,0,
+       -1,1,0,4,
+       -1,1,0,4  
   };
   
   for(int i= 0; i != bag_dir.size(); i ++)
@@ -223,10 +236,17 @@ main (int argc, char** argv)
     outFile << "stamp" << ',' << "x" << ',' << "y" << ',' << "z" << ',' <<"r" << ',' << "rms" <<endl;  
 
     int num_keypoints=0;
-    while((p = readdir(pdir)) != NULL)
+    struct dirent **namelist;
+    int n=scandir(workdir.c_str(),&namelist,0,alphasort);
+    if(n < 0) cout << "scandir return "<< n  << endl;
+    else
     {
+      int index=0;
+      while(index < n)
+      {
 	//这里需要注意，linux平台下一个目录中有"."和".."隐藏文件，需要过滤掉
 	//d_name是一个char数组，存放当前遍历到的文件名
+	p=namelist[index];
 	if(p->d_name[0] == 'h'&& strncmp(p->d_name + 18,".pcd", 5)==0)
 	{
 	  Center temp;	
@@ -237,19 +257,23 @@ main (int argc, char** argv)
 	  cout<<temp1<<endl;
 	  pcl::ModelCoefficients::Ptr coefficients_sphere (new pcl::ModelCoefficients);
 	  spherefit(temp1,temp2,coefficients_sphere,threshold[2*i]);
-	  if(coefficients_sphere->values.size()==0) continue;
-	  
-	  temp.x=coefficients_sphere->values[0];
-	  temp.y=coefficients_sphere->values[1];
-	  temp.z=coefficients_sphere->values[2];
-	  temp.r=coefficients_sphere->values[3];
-	  temp.rms=coefficients_sphere->values[4];
-
-	  centers_h.push_back(temp);	  
-	  cout<<temp.stamp << ',' << temp.x<< ',' << temp.y << ','<<temp.z << ',' << temp.r<< ',' << temp.rms<<endl<<endl;
-	  outFile << temp.stamp << ',' << temp.x<< ',' << temp.y << ',' << temp.z << ','<<temp.r<< ',' << temp.rms<< endl;  	 
+	  if(coefficients_sphere->values.size()!=0)
+	  {
+	    temp.x=coefficients_sphere->values[0];	  
+	    temp.y=coefficients_sphere->values[1];
+	    temp.z=coefficients_sphere->values[2];
+	    temp.r=coefficients_sphere->values[3];
+	    temp.rms=coefficients_sphere->values[4];
+	    centers_h.push_back(temp);	  
+	    cout<<temp.stamp << ',' << temp.x<< ',' << temp.y << ','<<temp.z << ',' << temp.r<< ',' << temp.rms<<endl<<endl;
+	    outFile << temp.stamp << ',' << temp.x<< ',' << temp.y << ',' << temp.z << ','<<temp.r<< ',' << temp.rms<< endl;  	 
+	  }	  
 	}
-    }    
+	free(namelist[index]);
+	index++;
+      }
+      free(namelist);
+    }   
     closedir(pdir);  
     outFile.close();
       
@@ -267,10 +291,16 @@ main (int argc, char** argv)
     outFile << "stamp" << ',' << "x" << ',' << "y" << ',' << "z" << ',' <<"r" << ',' << "rms" <<endl;  
     
     num_keypoints=0;
-    while((p = readdir(pdir)) != NULL)
+    n=scandir(workdir.c_str(),&namelist,0,alphasort);
+    if(n < 0) cout << "scandir return "<< n  << endl;
+    else
     {
+      int index=0;
+      while(index < n)
+      {
 	//这里需要注意，linux平台下一个目录中有"."和".."隐藏文件，需要过滤掉
 	//d_name是一个char数组，存放当前遍历到的文件名
+	p=namelist[index];
 	if(p->d_name[0] == 'v'&& strncmp(p->d_name + 18,".pcd", 5)==0)
 	{
 	  Center temp;	
@@ -281,19 +311,23 @@ main (int argc, char** argv)
 	  cout<<temp1<<endl;
 	  pcl::ModelCoefficients::Ptr coefficients_sphere (new pcl::ModelCoefficients);
 	  spherefit(temp1,temp2,coefficients_sphere,threshold[2*i+1]);
-	  if(coefficients_sphere->values.size()==0) continue;
-	  
-	  temp.x=coefficients_sphere->values[0];
-	  temp.y=coefficients_sphere->values[1];
-	  temp.z=coefficients_sphere->values[2];
-	  temp.r=coefficients_sphere->values[3];
-	  temp.rms=coefficients_sphere->values[4];  
-	  centers_v.push_back(temp);
-	  
-	  cout<<temp.stamp << ',' << temp.x<< ',' << temp.y << ','<<temp.z << ',' << temp.r<< ',' << temp.rms<<endl<<endl;
-	  outFile << temp.stamp << ',' << temp.x<< ',' << temp.y << ',' << temp.z << ','<<temp.r<< ',' << temp.rms<< endl; 
+	  if(coefficients_sphere->values.size()!=0)
+	  {
+	    temp.x=coefficients_sphere->values[0];	  
+	    temp.y=coefficients_sphere->values[1];
+	    temp.z=coefficients_sphere->values[2];
+	    temp.r=coefficients_sphere->values[3];
+	    temp.rms=coefficients_sphere->values[4];
+	    centers_v.push_back(temp);	  
+	    cout<<temp.stamp << ',' << temp.x<< ',' << temp.y << ','<<temp.z << ',' << temp.r<< ',' << temp.rms<<endl<<endl;
+	    outFile << temp.stamp << ',' << temp.x<< ',' << temp.y << ',' << temp.z << ','<<temp.r<< ',' << temp.rms<< endl;  	 
+	  }
 	}
-    }  
+	free(namelist[index]);
+	index++;
+      }
+      free(namelist);
+    }
     closedir(pdir);  
     outFile.close();       
   }
@@ -326,7 +360,7 @@ main (int argc, char** argv)
   }
   //4、时间戳对应
   // 写文件  
-  outFile.open("data_vh.csv", ios::out);   
+  outFile.open("all_correspondences.csv", ios::out);   
   outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
   ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;  
   for (vector<int>::size_type j= 0; j != centers_v.size(); j ++)
@@ -361,7 +395,30 @@ main (int argc, char** argv)
   cout<<"good_correspondences.size()="<<good_correspondences.size()<<endl;
   cout<<" after rej.setInlierThreshold(0.03),rej.getBestTransformation() results: "<<endl;
   cout<<"pose = "<<pose<<endl;
-    
+
+  // 写文件  
+  outFile.open("good_correspondences.csv", ios::out);   
+  outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
+  ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;    
+  for(pcl::Correspondences::iterator it = good_correspondences.begin(); it != good_correspondences.end(); it ++)
+  {
+    int j=it->index_query,i=it->index_match;
+    outFile << centers_h[i].stamp << ','  << centers_h[i].x<< ','<< centers_h[i].y << ',' << centers_h[i].z<< ',' 
+    << centers_h[i].r<< ',' << centers_h[i].rms
+    << ',' <<centers_v[j].stamp << ',' << centers_v[j].x<< ',' << centers_v[j].y << ',' << centers_v[j].z << ','
+    << centers_v[j].r<< ',' << centers_v[j].rms<< endl;     
+  }
+  outFile.close(); 
+  
+  // Obtain the best transformation between the two sets of keypoints given the remaining correspondences
+  TransformationEstimationSVD<PointT, PointT> trans_est;
+  trans_est.estimateRigidTransformation (*keypoints_v, *keypoints_h, all_correspondences, pose);
+  cout<<" TransformationEstimationSVD with all_correspondences: "<<endl;
+  cout<<"pose = "<<pose<<endl;
+  trans_est.estimateRigidTransformation (*keypoints_v, *keypoints_h, good_correspondences, pose);
+  cout<<" TransformationEstimationSVD with good_correspondences: "<<endl;
+  cout<<"pose = "<<pose<<endl;
+  
    //5。 transform for validation
    /*bag_dir[0]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/validation.bag";
    workdir=bag_dir[0]+"_scan_ver";

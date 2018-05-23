@@ -95,10 +95,11 @@ int main ( int argc, char** argv )
     vector<Point3f> pts1, pts2;
     int num=0;
    
-   string workdir="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag_scan_ver";
+   //string workdir="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag_scan_ver";
+   string workdir="/home/whu/data/whuplat/VLP16/_2018-05-22-21-58-35.bag_pc_ver";
    chdir(workdir.c_str());
    ifstream inFile; 
-   inFile.open("data_vh.csv",ios::in);
+   inFile.open("good_correspondences.csv",ios::in);
    ofstream outFile,outFile2;
    outFile.open("result.log", ios::out);  
     
@@ -110,7 +111,7 @@ int main ( int argc, char** argv )
     num=0;
     while (getline(inFile, line))   
     {  
-        double R=0.315;
+        //double R=0.315;
         //cout <<"原始字符串："<< line << endl; //整行输出  
         istringstream sin(line); //将整行字符串line读入到字符串流istringstream中  
         vector<string> fields; //声明一个字符串向量  
@@ -121,7 +122,7 @@ int main ( int argc, char** argv )
         }  
         double x1=stof(fields[1].c_str()),y1 = atof(fields[2].c_str()),z1 = atof(fields[3].c_str()),r1 = atof(fields[4].c_str());
 	double x2=stof(fields[7].c_str()),y2 = atof(fields[8].c_str()),z2 = atof(fields[9].c_str()),r2 = atof(fields[10].c_str());
-	if(r1>R*0.707||r2>R*0.707)  continue;
+	//if(r1>R*0.707||r2>R*0.707)  continue;
 
 	Point3f p1(x1,y1,z1);
         Point3f p2(x2,y2,z2);
