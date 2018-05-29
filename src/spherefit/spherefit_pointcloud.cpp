@@ -180,11 +180,10 @@ int transform(std::string infile,std::string outfile)
   */
   Eigen::Matrix4f transform= Eigen::Matrix4f::Identity();
   transform  <<   
--0.00112908,   -0.609369,    0.792886,   0.0341578,
-  0.0466361,   -0.792055,   -0.608665,   -0.117896,
-   0.998911,   0.0362899,   0.0293129,     -0.1441,
-          0,           0,           0,           1;
-	 
+ 0.734287,   -0.060771,   0.676113,    0.11453,
+ 0.0270035,   0.997811,  0.0603593,  0.0138586,
+ -0.678301, -0.0260636,   0.734321,  -0.134201,
+         0,          0,          0,          1;	 
   // Print the transformation 
   printf ("Method: using a Matrix4f\n");
   //std::cout << transform << std::endl;
@@ -210,8 +209,8 @@ main (int argc, char** argv)
   string subdir;
    
   // experiment 2  yoga  
-  bag_dir.push_back("/home/whu/data/whuplat/VLP16/_2018-05-22-21-56-22.bag");
-  bag_dir.push_back("/home/whu/data/whuplat/VLP16/_2018-05-22-21-58-35.bag");
+  bag_dir.push_back("/media/whu/Research/04Research_PhD/02VLP16_Calibration/VLP16/_2018-05-22-21-56-22.bag");
+  bag_dir.push_back("/media/whu/Research/04Research_PhD/02VLP16_Calibration/VLP16/_2018-05-22-21-58-35.bag");
   double threshold[4][4]={
        -1,1,-4,0,
        -1,1,-4,0,
@@ -420,9 +419,7 @@ main (int argc, char** argv)
   cout<<"pose = "<<pose<<endl;
   
    //5。 transform for validation
-   /*bag_dir[0]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/validation.bag";
-   workdir=bag_dir[0]+"_scan_ver";
-   //threshold[0]=-0.2,threshold[1]=0.5,threshold[2]=-1.5,threshold[3]=0;
+   workdir=bag_dir[0]+"_pc_ver";
    chdir(workdir.c_str());
    pdir = opendir(workdir.c_str()); 
    //清空子路径
@@ -436,14 +433,12 @@ main (int argc, char** argv)
 	if(p->d_name[0] == 'v'&& strncmp(p->d_name + 18,".pcd", 5)==0)
 	{
 	  string temp1 =string(p->d_name);
-	  string temp3= workdir+"/transform/"+string(p->d_name);	
-	  	  	 	  	  
+	  string temp3= workdir+"/transform/"+string(p->d_name);		  	  	 	  	  
 	  //transform
 	  transform(temp1,temp3);
-
 	}
     }   
-    closedir(pdir);*/
+    closedir(pdir);
     
   return (0);
 }

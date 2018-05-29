@@ -96,7 +96,7 @@ int main ( int argc, char** argv )
     int num=0;
    
    //string workdir="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag_scan_ver";
-   string workdir="/home/whu/data/whuplat/VLP16/_2018-05-22-21-58-35.bag_pc_ver";
+   string workdir="/media/whu/Research/04Research_PhD/02VLP16_Calibration/VLP16/_2018-05-22-21-58-35.bag_pc_ver";
    chdir(workdir.c_str());
    ifstream inFile; 
    inFile.open("good_correspondences.csv",ios::in);
