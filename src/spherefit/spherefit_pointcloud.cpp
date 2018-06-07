@@ -13,7 +13,10 @@
 #include <pcl/console/parse.h>
 #include <pcl/common/transforms.h>
 #include <pcl/visualization/pcl_visualizer.h>
-#include "Eigen/Dense"
+
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Geometry>
 using namespace Eigen;
 
 #include <dirent.h>//遍历系统指定目录下文件要包含的头文件
@@ -30,6 +33,8 @@ using namespace std;
 #include <pcl/registration/transformation_estimation_svd.h>
 using namespace pcl;
 using namespace pcl::registration;
+
+#define PI 3.14159262728
 
 typedef pcl::PointXYZ PointT;
 
@@ -218,7 +223,7 @@ main (int argc, char** argv)
        -1,1,0,4  
   };
   
-  for(int i= 0; i != bag_dir.size(); i ++)
+  /*for(int i= 0; i != bag_dir.size(); i ++)
   {
     //2、horizontial 圆心拟合及存储
     workdir=bag_dir[i]+"_pc_hori";
@@ -414,12 +419,14 @@ main (int argc, char** argv)
   trans_est.estimateRigidTransformation (*keypoints_v, *keypoints_h, all_correspondences, pose);
   cout<<" TransformationEstimationSVD with all_correspondences: "<<endl;
   cout<<"pose = "<<pose<<endl;
-  trans_est.estimateRigidTransformation (*keypoints_v, *keypoints_h, good_correspondences, pose);
+  trans_est.estimateRigidTransformation (*keypoints_h, *keypoints_v, good_correspondences, pose);
   cout<<" TransformationEstimationSVD with good_correspondences: "<<endl;
   cout<<"pose = "<<pose<<endl;
   
+  
+  
    //5。 transform for validation
-   workdir=bag_dir[0]+"_pc_ver";
+   workdir=bag_dir[1]+"_pc_ver";
    chdir(workdir.c_str());
    pdir = opendir(workdir.c_str()); 
    //清空子路径
@@ -438,7 +445,29 @@ main (int argc, char** argv)
 	  transform(temp1,temp3);
 	}
     }   
-    closedir(pdir);
+    closedir(pdir);*/
+    
+  // 建议使用 Eigen感觉有问题
+  // /scripts/transformations.py
+ /*Eigen::Matrix4f transform= Eigen::Matrix4f::Identity();
+ transform  <<   
+ 0.734287,   -0.060771,   0.676113,    0.11453,
+ 0.0270035,   0.997811,  0.0603593,  0.0138586,
+ -0.678301, -0.0260636,   0.734321,  -0.134201,
+         0,          0,          0,          1;	  
+  // Print the transformation 
+  printf ("Method: using a Matrix4f\n");
+  //std::cout << transform << std::endl;
+  //旋转矩阵转换为欧拉角
+  Eigen::Matrix3d R=Eigen::Matrix3d::Identity();
+    R  << transform(0,0),transform(1,0),transform(2,0),
+	  transform(0,1),transform(1,1),transform(2,1),
+	  transform(0,2),transform(1,2),transform(2,2);
+  Eigen::Vector3d euler_angles=R.eulerAngles(2,1,0);
+  Eigen::Quaterniond q=Eigen::Quaterniond(R);
+  // ZYX
+  cout<<"intrinsic rotations YPR around rotating Z-Y-X"<<euler_angles.transpose()<<endl;   
+  cout<<"quaternion=\n"<<q.coeffs()<<endl;    //(x,y,z,w)*/
     
   return (0);
 }

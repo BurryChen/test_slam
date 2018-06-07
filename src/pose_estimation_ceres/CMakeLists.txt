@@ -20,3 +20,9 @@ include_directories( ${OpenCV_DIRS} )
 add_executable( pose_estimation_ceres pose_estimation_ceres.cpp )
 # 与Ceres和OpenCV链接
 target_link_libraries( pose_estimation_ceres ${CERES_LIBRARIES} ${OpenCV_LIBS} )
+
+install(TARGETS  pose_estimation_ceres 
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
