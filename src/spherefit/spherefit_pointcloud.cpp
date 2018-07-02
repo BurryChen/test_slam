@@ -223,7 +223,7 @@ main (int argc, char** argv)
        -1,1,0,4  
   };
   
-  /*for(int i= 0; i != bag_dir.size(); i ++)
+  for(int i= 0; i != bag_dir.size(); i ++)
   {
     //2、horizontial 圆心拟合及存储
     workdir=bag_dir[i]+"_pc_hori";
@@ -445,7 +445,7 @@ main (int argc, char** argv)
 	  transform(temp1,temp3);
 	}
     }   
-    closedir(pdir);*/
+    closedir(pdir);
     
   // 建议使用 Eigen感觉有问题
   // /scripts/transformations.py

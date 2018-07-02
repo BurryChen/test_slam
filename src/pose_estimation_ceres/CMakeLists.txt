@@ -17,7 +17,7 @@ find_package( OpenCV REQUIRED )
 include_directories( ${OpenCV_DIRS} )
 
 #add_executable( pose_estimation_ceres simple_bundle_adjuster.cc )
-add_executable( pose_estimation_ceres pose_estimation_ceres.cpp )
+add_executable( pose_estimation_ceres pose_estimation_ceres.cpp)
 # 与Ceres和OpenCV链接
 target_link_libraries( pose_estimation_ceres ${CERES_LIBRARIES} ${OpenCV_LIBS} )
 

@@ -6,6 +6,8 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <Eigen/SVD>
+#include <Eigen/Dense>
+#include <Eigen/Eigenvalues>
 #include <chrono>
 
 
@@ -22,6 +24,7 @@
 
 using namespace std;
 using namespace cv;
+using namespace Eigen;
 
 
 void pose_estimation_3d3d_svd (
@@ -34,7 +37,7 @@ void pose_estimation_3d3d_svd (
 void bundleAdjustment_onlypose_ceres(
     const vector< Point3f >& pts1,
     const vector< Point3f >& pts2,
-    Mat& R, Mat& t
+    Mat& R, Mat& t,Matrix<double,6,6> &Cov
 );
 
 void bundleAdjustment_posesphere_ceres(
@@ -46,26 +49,29 @@ void bundleAdjustment_posesphere_ceres(
 
 int main ( int argc, char** argv )
 {   
-    vector<Point3f> pts1, pts2;
+    vector<Point3f> pts1, pts2,pts1_check,pts2_check;
     int num=0;
-   
-   string workdir="/media/whu/Research/01LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag_scan_ver";
-   chdir(workdir.c_str());
+    //argv[1]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/dataset9_angle90_0_20180621/T2-L1-0-L2-0.bag_scan_ver/cp_r_R";
+    //argv[2]="cp_r_R.csv";
+   /*if(argc!=3)
+   {
+     printf("parameter is dir and file");
+     return 0;
+   }*/
+   //string workdir="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/dataset2_angle90_0_20180619/T2-L1-0-L2-0.bag_scan_ver/cp_all";
+   chdir(argv[1]);
    ifstream inFile;
-   inFile.open("data_vh.csv",ios::in);
-   ofstream outFile,outFile2;
+   inFile.open(argv[2],ios::in);
+   //inFile.open("data_vh.csv",ios::in);
+   ofstream outFile;
    outFile.open("result.log", ios::out);  
    
-   outFile2.open("data_vh_seleted.csv", ios::out);   
-   outFile2  << "num"<<','<<"x1" << ',' << "y1" << ',' << "z1" << ',' <<  "x2" << ',' << "y2" << ',' <<"z2"<<endl;  
- 
    string line; 
    //整行读取，换行符“\n”区分，遇到文件尾标志eof终止读取 ,第一行跳过
     getline(inFile, line);
     num=0;
     while (getline(inFile, line))   
     {  
-        double R=0.315;
         //cout <<"原始字符串："<< line << endl; //整行输出  
         istringstream sin(line); //将整行字符串line读入到字符串流istringstream中  
         vector<string> fields; //声明一个字符串向量  
@@ -76,25 +82,26 @@ int main ( int argc, char** argv )
         }  
         double x1=stof(fields[1].c_str()),y1 = atof(fields[2].c_str()),z1 = atof(fields[3].c_str()),r1 = atof(fields[4].c_str());
 	double x2=stof(fields[7].c_str()),y2 = atof(fields[8].c_str()),z2 = atof(fields[9].c_str()),r2 = atof(fields[10].c_str());
-	if(r1>R*0.707||r2>R*0.707)  continue;
 
 	Point3f p1(x1,y1,z1);
         Point3f p2(x2,y2,z2);
-        pts1.push_back ( p1);
-        pts2.push_back ( p2); 
 	num++;
+	
+	if(num%3==0)
+	{pts1.push_back ( p1);  pts2.push_back ( p2); }
+        else if (num%3==1)
+	{pts1_check.push_back ( p1);  pts2_check.push_back ( p2);} 
         //cout <<"corresponding-"<<num<< ":\t"<< x1 << "\t" << y1 << "\t" << z1 << "\t"<<x2<< "\t" << y2 << "\t" << z2 << endl; 
-        outFile2 << num << ','  << x1<< ','<< y1 << ',' << z1<< ',' << x2<< ',' << y2 << ',' << z2 << endl;  
     }
 
-    cout<<"3d-3d pairs: "<<pts1.size() <<endl;
+    outFile<<"3d-3d pairs: "<<pts1.size() <<endl;
     Mat R, t;
-    /*pose_estimation_3d3d_svd ( pts1, pts2, R, t );
-    cout<<"ICP via SVD results: "<<endl;
-    cout<<"R = "<<R<<endl;
-    cout<<"t = "<<t<<endl;
-    cout<<"R_inv = "<<R.t() <<endl;
-    cout<<"t_inv = "<<-R.t() *t<<endl;*/
+    pose_estimation_3d3d_svd ( pts1, pts2, R, t );
+    outFile<<"ICP via SVD results: "<<endl;
+    outFile<<"R = "<<R<<endl;
+    outFile<<"t = "<<t<<endl;
+    outFile<<"R_inv = "<<R.t() <<endl;
+    outFile<<"t_inv = "<<-R.t() *t<<endl;
 
     // verify p1 = R*p2 + t
     /*for ( int i=0; i<pts1.size(); i++ )
@@ -114,8 +121,9 @@ int main ( int argc, char** argv )
     cout<<"calling bundle adjustment"<<endl;
 
     //bundleAdjustment_g2o( pts1, pts2, R, t );
-    bundleAdjustment_onlypose_ceres( pts1, pts2, R, t );
-    bundleAdjustment_posesphere_ceres( pts1, pts2, R, t );
+    Matrix<double,6,6> Cov;
+    bundleAdjustment_onlypose_ceres( pts1, pts2, R, t,Cov);
+    //bundleAdjustment_posesphere_ceres( pts1, pts2, R, t );
     cout<<" ceres residual bundleAdjustment results: "<<endl;
     cout<<"R = "<<R<<endl;
     cout<<"t = "<<t<<endl;
@@ -125,9 +133,11 @@ int main ( int argc, char** argv )
     outFile<<"R_inv = "<<R.t() <<endl;
     outFile<<"t_inv = "<<-R.t() *t<<endl;
     
-    //2.Validation_residual: // verify p1 = R*p2 + t
-    /*ofstream resFile;
-    resFile.open("residual.csv", ios::out);     
+    //2.控制点_residual: // verify p1 = R*p2 + t
+    ofstream resFile;
+    resFile.open("residual_control.csv", ios::out);  
+    vector<double> v_res;
+    double mean[4]  = {0.0},rms[4]={0.0};   
     for ( int i=0; i<pts1.size(); i++ )
     {
         cout<<"p1 = "<<pts1[i]<<endl;
@@ -155,8 +165,123 @@ int main ( int argc, char** argv )
 	+temp.at<double>(2,0)*temp.at<double>(2,0));
 	resFile<<//pts1[i]<<pts2[i]<< R * (Mat_<double>(3,1)<<pts2[i].x, pts2[i].y, pts2[i].z) + t<<
            temp.at<double>(0,0)<<","<<temp.at<double>(1,0)<<","<<temp.at<double>(2,0)<<","<<Eucd<<endl;
-    }*/
+	  
+	v_res.push_back(temp.at<double>(0,0));v_res.push_back(temp.at<double>(1,0));v_res.push_back(temp.at<double>(2,0));
+	mean[0]+=temp.at<double>(0,0);mean[1]+=temp.at<double>(1,0);mean[2]+=temp.at<double>(2,0);mean[3]+=Eucd;
+	rms[0]+=temp.at<double>(0,0)*temp.at<double>(0,0);rms[1]+=temp.at<double>(1,0)*temp.at<double>(1,0);rms[2]+=temp.at<double>(2,0)*temp.at<double>(2,0);rms[3]+=Eucd*Eucd;
+    }
+    for ( int i=0; i<4; i++ )
+    {
+       mean[i] = mean[i]/pts1.size();
+       resFile<<mean[i]<<",";
+    }
+    //resFile<<endl;
+    for ( int i=0; i<4; i++ )
+    {
+       rms[i] = sqrt(rms[i]/pts1.size());
+       resFile<<rms[i]<<",";
+    }
+    double VTV=0;
+    for ( auto a:v_res ) VTV+=a*a;
     
+    double sigma2=VTV/(3*pts1.size()-6);
+    double sigma=sqrt(sigma2);
+    resFile<<endl<<"VTV="<<VTV<<endl;
+    resFile<<"sigma="<<sqrt(sigma2)<<"\nsigma2="<<sigma2<<endl;
+    //精度评定
+    resFile<<"Covariance=\n"<<Cov<<endl;
+    resFile<<"D=sigma2*Cov=\n"<<sigma2*Cov<<endl;
+    
+    resFile<<"sigma_X=\n";
+    for ( int i=0; i<6; i++ )
+    {
+      resFile<<sigma*sqrt(Cov(i,i))<<endl;
+    }
+     //法方程系数阵
+    Eigen::MatrixXd correlation= MatrixXd::Ones(6,6);
+    for(int i=0;i<6;i++)
+    {
+      for(int j=0;j<6;j++)
+      {
+	correlation(i,j)=Cov(i,j)/sqrt(Cov(i,i)*Cov(j,j));
+      }
+    }
+    resFile << "Here is the matrix correlation:\n" << correlation << std::endl;          
+          
+    //法方程系数阵
+    Eigen::MatrixXd N= MatrixXd::Ones(6,6);
+    N=Cov.inverse();    
+    resFile << "Here is the matrix Normal:\n" << N << std::endl;       
+    
+    //条件数，判断方程组性态
+    SelfAdjointEigenSolver<Matrix<double,6,6>> eigensolver(N);
+    if (eigensolver.info() != Success) abort();
+    VectorXd eivals = eigensolver.eigenvalues();
+    resFile << "The eigenvalues of N are:" << endl << eivals << endl;
+    resFile << "cond(N)=" <<  eivals[5]<<"/"<<eivals[0] <<"="<<  eivals[5]/eivals[0] << endl;    
+    
+    N+=MatrixXd::Identity(6,6);
+    SelfAdjointEigenSolver<Matrix<double,6,6>> eigensolver2(N);
+    if (eigensolver2.info() != Success) abort();
+    eivals = eigensolver2.eigenvalues();
+    resFile << "The eigenvalues of N+E are:" << endl << eivals << endl;
+    resFile << "cond(N+E)=" <<  eivals[5]<<"/"<<eivals[0] <<"="<<  eivals[5]/eivals[0] << endl;   
+    resFile<<endl;
+    Eigen::MatrixXd Cov2=(N).inverse();
+    resFile<<"Covariance2=\n"<<Cov2<<endl;
+    resFile<<"D=sigma2*Cov=\n"<<sigma2*Cov2<<endl;
+    resFile<<"sigma_X=\n";
+    for ( int i=0; i<6; i++ )
+    {
+      resFile<<sigma*sqrt(Cov2(i,i))<<endl;
+    }
+    resFile<<endl;
+    //检查点残差
+    ofstream resFile2;
+    resFile2.open("residual_check.csv", ios::out);  
+    double mean2[4]= {0.0},rms2[4]={0.0}; 
+    for ( int i=0; i<pts1_check.size(); i++ )
+    {
+        cout<<"p1_check = "<<pts1_check[i]<<endl;
+        cout<<"p2_check = "<<pts2_check[i]<<endl;
+        cout<<"(R*p2_check+t) = "<< 
+            R * (Mat_<double>(3,1)<<pts2_check[i].x, pts2_check[i].y, pts2_check[i].z) + t
+            <<endl;	    
+	cout<<"(R*p2_check+t-p1_check) = "<< 
+           R * (Mat_<double>(3,1)<<pts2_check[i].x, pts2_check[i].y, pts2_check[i].z) + t - (Mat_<double>(3,1)<<pts1_check[i].x, pts1_check[i].y, pts1_check[i].z)
+            <<endl;
+        cout<<endl;
+	
+	outFile<<"p1_check = "<<pts1_check[i]<<endl;
+        outFile<<"p2_check = "<<pts2_check[i]<<endl;
+        outFile<<"(R*p2_check+t) = "<< 
+            R * (Mat_<double>(3,1)<<pts2_check[i].x, pts2_check[i].y, pts2_check[i].z) + t
+            <<endl;	    
+	outFile<<"(R*p2_check+t-p1_check) = "<< 
+           R * (Mat_<double>(3,1)<<pts2_check[i].x, pts2_check[i].y, pts2_check[i].z) + t - (Mat_<double>(3,1)<<pts1_check[i].x, pts1_check[i].y, pts1_check[i].z)
+            <<endl;
+        outFile<<endl;
+	
+	Mat temp=R * (Mat_<double>(3,1)<<pts2_check[i].x, pts2_check[i].y, pts2_check[i].z) + t - (Mat_<double>(3,1)<<pts1_check[i].x, pts1_check[i].y, pts1_check[i].z);
+	double Eucd=sqrt(temp.at<double>(0,0)*temp.at<double>(0,0)+temp.at<double>(1,0)*temp.at<double>(1,0)
+	+temp.at<double>(2,0)*temp.at<double>(2,0));
+	resFile2<<//pts1_check[i]<<pts2_check[i]<< R * (Mat_<double>(3,1)<<pts2_check[i].x, pts2_check[i].y, pts2_check[i].z) + t<<
+           temp.at<double>(0,0)<<","<<temp.at<double>(1,0)<<","<<temp.at<double>(2,0)<<","<<Eucd<<endl;
+	mean2[0]+=temp.at<double>(0,0);mean2[1]+=temp.at<double>(1,0);mean2[2]+=temp.at<double>(2,0);mean2[3]+=Eucd;
+	rms2[0]+=temp.at<double>(0,0)*temp.at<double>(0,0);rms2[1]+=temp.at<double>(1,0)*temp.at<double>(1,0);rms2[2]+=temp.at<double>(2,0)*temp.at<double>(2,0);rms2[3]+=Eucd*Eucd;
+    }
+    for ( int i=0; i<4; i++ )
+    {
+       mean2[i] = mean2[i]/pts1.size();
+       resFile2<<mean2[i]<<",";
+    }
+    //resFile2<<endl;
+    for ( int i=0; i<4; i++ )
+    {
+       rms2[i] = sqrt(rms2[i]/pts1.size());
+       resFile2<<rms2[i]<<",";
+    }
+    resFile2<<endl;
     return 1;   
 }
 
@@ -283,7 +408,7 @@ struct CORRESPONDING_POSE_SPHERE_COST
 void bundleAdjustment_onlypose_ceres (
     const vector< Point3f >& pts1,
     const vector< Point3f >& pts2,
-    Mat& R, Mat& t )
+    Mat& R, Mat& t,Matrix<double,6,6> &Cov)
 {
     int num=pts1.size();   
     double pose[6]={0,0,0,0,0,0};   //estimation pose,先欧拉角后平移
@@ -317,7 +442,7 @@ void bundleAdjustment_onlypose_ceres (
     chrono::duration<double> time_used = chrono::duration_cast<chrono::duration<double>>( t2-t1 );
     cout<<"solve time cost = "<<time_used.count()<<" seconds. "<<endl;
 
-    // 输出结果
+    // 输出结果,旋转向量，平移量
     cout<<summary.FullReport() <<endl;
     cout<<"estimated pose= ";
     for(auto a:pose) cout<<a<<" ";
@@ -335,8 +460,26 @@ void bundleAdjustment_onlypose_ceres (
 	  R_[0][1],R_[1][1],R_[2][1],
 	  R_[0][2],R_[1][2],R_[2][2]
         );
-    t = ( Mat_<double> ( 3,1 ) << pose[3],pose[4],pose[5] );   
+    t = ( Mat_<double> ( 3,1 ) << pose[3],pose[4],pose[5] );       
+    
+    //output covariance
+    ceres::Covariance::Options options2;
+    options2.algorithm_type=ceres::DENSE_SVD;
+    options2.apply_loss_function=false;
+    options2.min_reciprocal_condition_number=1e-5;
+    ceres::Covariance covariance(options2);
 
+    vector<pair<const double*, const double*> > covariance_blocks;
+    covariance_blocks.push_back(make_pair(pose, pose));
+
+    CHECK(covariance.Compute(covariance_blocks, &problem));
+
+    double covariance_posepose[6 * 6];
+    covariance.GetCovarianceBlock(pose, pose, covariance_posepose);   
+    
+    //协因数阵及法方程系数阵
+    Eigen:Map<Matrix<double,6,6> > Covtemp(covariance_posepose);
+    Cov=Covtemp;
 }
 
 void bundleAdjustment_posesphere_ceres (

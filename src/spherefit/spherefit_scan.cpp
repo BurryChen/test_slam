@@ -31,7 +31,10 @@ using namespace std;
 #include <pcl/registration/correspondence_rejection_sample_consensus.h>
 #include <pcl/registration/transformation_estimation_svd.h>
 #include <pcl/common/distances.h>
+using namespace pcl;
+using namespace pcl::registration;
 
+#define PI 3.14159262728
 #define Sign(y) (y>=0?1:-1)
 
 typedef pcl::PointXYZ PointT;
@@ -151,7 +154,6 @@ int circle2dfit(std::string infile,std::string outfile, pcl::ModelCoefficients::
     double rms = sqrt(accum/(residual.size()-1)); //RMS  
     coefficients_circle2d->values.push_back(rms);
   }
-
 }
 
 int transform(std::string infile,std::string outfile)
@@ -263,8 +265,8 @@ main (int argc, char** argv)
    
   // experiment 2  yoga
   double R=0.315;    
-  bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T1-L1-0-L2-0.bag");
-  bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/T2-L1-1-L2-1.bag");
+  bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/dataset1_linuxdata20180408/T1-L1-0-L2-0.bag");
+  bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/dataset1_linuxdata20180408/T2-L1-1-L2-1.bag");
   //bag_dir.push_back("/media/whu/Research/LRF_Calibation/data/linuxdata20180408/T3-L1-1-L2-0.bag");
   //bag_dir.push_back("/media/whu/Research/LRF_Calibation/data/linuxdata20180408/T4-L1-1-L2-1.bag");
   int flag[8]={-1,-1,1,1,1,-1,1,1};
@@ -278,6 +280,18 @@ main (int argc, char** argv)
        0,1.5,   0,1.5,
        0,0.5,-1.5,  0, 
   };
+  /*double R=0.325;    
+  bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/dataset9_angle90_0_20180621/T1-L1-1-L2-1.bag");
+  bag_dir.push_back("/media/whu/Research/04Research_PhD/01LRF_Calibation/data/dataset9_angle90_0_20180621/T2-L1-0-L2-0.bag");
+  int flag[4]={1,1,-1,-1};
+  double threshold[8][4]={
+       0,0.7, 0,2,
+       0,1, -2,0,    
+       -1,0,-2,0,
+       -0.4,0.4,0,2,
+  };*/
+
+
   
   for(int i= 0; i != bag_dir.size(); i ++)
   {
@@ -309,7 +323,7 @@ main (int argc, char** argv)
 	  cout<<temp1<<endl;
 	  pcl::ModelCoefficients::Ptr coefficients_circle2d (new pcl::ModelCoefficients);
 	  circle2dfit(temp1,temp2,coefficients_circle2d,threshold[2*i]);
-	  if(coefficients_circle2d->values.size()==0 ||coefficients_circle2d->values[2]>R*0.707) continue;
+	  if(coefficients_circle2d->values.size()==0 ) continue;
 	  
 	  temp.x=coefficients_circle2d->values[0];
 	  temp.y=coefficients_circle2d->values[1];
@@ -354,7 +368,7 @@ main (int argc, char** argv)
 	  cout<<temp1<<endl;
 	  pcl::ModelCoefficients::Ptr coefficients_circle2d (new pcl::ModelCoefficients);
 	  circle2dfit(temp1,temp2,coefficients_circle2d,threshold[2*i+1]);
-	  if(coefficients_circle2d->values.size()==0||coefficients_circle2d->values[2]>R*0.707) continue;
+	  if(coefficients_circle2d->values.size()==0) continue;
 	  
 	  temp.x=coefficients_circle2d->values[0];
 	  temp.y=coefficients_circle2d->values[1];
@@ -401,8 +415,11 @@ main (int argc, char** argv)
   } 
   
   //4、时间戳对应
-  // 写文件     
-  outFile.open("data_vh.csv", ios::out);   
+  // 写文件 
+
+  subdir=workdir+"/cp_all";
+  mkdir(subdir.c_str(),777);
+  outFile.open("cp_all.csv", ios::out);       
   outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
   ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;  
   for (vector<int>::size_type j= 0; j != centers_v.size(); j ++)
@@ -416,10 +433,6 @@ main (int argc, char** argv)
 	<< centers_h[i].r<< ',' << centers_h[i].rms
 	<< ',' <<centers_v[j].stamp << ',' << centers_v[j].x<< ',' << centers_v[j].y << ',' << centers_v[j].z << ','
 	<< centers_v[j].r<< ',' << centers_v[j].rms<< endl; 
-	
-	pcl::Correspondence corr;
-	corr.index_query = j;corr.index_match = i;corr.distance = 1;
-	all_correspondences.push_back(corr);
       }	
     }
   }
@@ -427,18 +440,78 @@ main (int argc, char** argv)
   
   //pre calculate Z sign in correspondences
   //precalZsign(keypoints_v,keypoints_h,all_correspondences);
-  
-  cout<<"all_correspondences.size()="<<all_correspondences.size()<<endl;
-  pcl::registration::CorrespondenceRejectorSampleConsensus<PointT> rej;
-  rej.setInputSource(keypoints_v);
-  rej.setInputTarget(keypoints_h);
-  rej.setMaximumIterations(10000);
-  rej.setInlierThreshold(0.01);
-  rej.getRemainingCorrespondences(all_correspondences,good_correspondences); 
-  Eigen::Matrix4f pose=rej.getBestTransformation();
-  cout<<"good_correspondences.size()="<<good_correspondences.size()<<endl;
-  cout<<" after rej.setInlierThreshold(0.01),rej.getBestTransformation() results: "<<endl;
+  // 写文件 
+  subdir=workdir+"/cp_r_R";
+  mkdir(subdir.c_str(),777);
+  outFile.open("cp_r_R.csv", ios::out);   
+  outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
+  ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;  
+  for (vector<int>::size_type j= 0; j != centers_v.size(); j ++)
+  {
+    for (vector<int>::size_type i= 0; i != centers_h.size(); i ++)
+    {
+      long long temp=abs(centers_h[i].stamp-centers_v[j].stamp);
+      if(temp<25000/2&&centers_h[i].r<=0.707*R&&centers_v[i].r<=0.707*R)
+      {	
+	outFile << centers_h[i].stamp << ','  << centers_h[i].x<< ','<< centers_h[i].y << ',' << centers_h[i].z<< ',' 
+	<< centers_h[i].r<< ',' << centers_h[i].rms
+	<< ',' <<centers_v[j].stamp << ',' << centers_v[j].x<< ',' << centers_v[j].y << ',' << centers_v[j].z << ','
+	<< centers_v[j].r<< ',' << centers_v[j].rms<< endl; 	
+	pcl::Correspondence corr;
+	corr.index_query = j;corr.index_match = i;corr.distance = 1;
+	all_correspondences.push_back(corr);
+      }	
+    }
+  }
+  outFile.close();
+
+  //pre calculate Z sign in correspondences
+  //precalZsign(keypoints_v,keypoints_h,all_correspondences); 
+  Eigen::Matrix4f pose=Eigen::Matrix4f::Identity();
+  cout<<"all_correspondences.size()="<<all_correspondences.size()<<endl;
+  // Obtain the best transformation between the two sets of keypoints given the remaining correspondences
+  TransformationEstimationSVD<PointT, PointT> trans_est;
+  trans_est.estimateRigidTransformation (*keypoints_v, *keypoints_h, all_correspondences, pose);
+  cout<<" TransformationEstimationSVD with all_correspondences: "<<endl;
+  cout<<"pose = "<<pose<<endl;
+  pcl::registration::CorrespondenceRejectorSampleConsensus<PointT> rej;
+  rej.setInputSource(keypoints_v);
+  rej.setInputTarget(keypoints_h);
+  rej.setMaximumIterations(10000);
+  rej.setInlierThreshold(0.04);
+  rej.getRemainingCorrespondences(all_correspondences,good_correspondences); 
+  pose=rej.getBestTransformation();
+  cout<<"good_correspondences.size()="<<good_correspondences.size()<<endl;
+  cout<<" after rej.setInlierThreshold(0.01),rej.getBestTransformation() results: "<<endl;
   cout<<"pose = "<<pose<<endl;
+
+  // 写文件 
+  subdir=workdir+"/cp_rej";
+  mkdir(subdir.c_str(),777);
+  outFile.open("cp_rej.csv", ios::out);    
+  outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
+  ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;    
+  for(pcl::Correspondences::iterator it = good_correspondences.begin(); it != good_correspondences.end(); it ++)
+  {
+    int j=it->index_query,i=it->index_match;
+    outFile << centers_h[i].stamp << ','  << centers_h[i].x<< ','<< centers_h[i].y << ',' << centers_h[i].z<< ',' 
+    << centers_h[i].r<< ',' << centers_h[i].rms
+    << ',' <<centers_v[j].stamp << ',' << centers_v[j].x<< ',' << centers_v[j].y << ',' << centers_v[j].z << ','
+    << centers_v[j].r<< ',' << centers_v[j].rms<< endl;
+  }
+  outFile.close();
+
+    
+
+    //旋转矩阵转换为欧拉角
+  Eigen::Matrix3d Rotation=Eigen::Matrix3d::Identity();
+  Rotation  << pose(0,0),pose(1,1),pose(0,2),
+	  pose(1,0),pose(1,1),pose(1,2),
+	  pose(2,0),pose(2,1),pose(2,2);
+  Eigen::Vector3d euler_angles=Rotation.eulerAngles(2,1,0)*180/PI;
+  cout<<"Rotation = "<<Rotation<<endl;
+  cout<<"intrinsic rotations YPR around rotating Z-Y-X"<<euler_angles.transpose()<<endl;  
+  cout<<"translations X-Y-Z "<<pose(0,3)<<" "<<pose(1,3)<< " "<<pose(2,3)<<endl; 
   
    //5.transform for validation
    /*bag_dir[0]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/validation.bag";
@@ -461,7 +534,6 @@ main (int argc, char** argv)
 	  	  	 	  	  
 	  //transform
 	  transform(temp1,temp3);
-
 	}
     }   
     closedir(pdir); */

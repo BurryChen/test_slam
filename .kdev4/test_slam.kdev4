@@ -8,7 +8,7 @@ ProjectRootRelative=./
 
 [CMake][CMake Build Directory 0]
 Build Directory Path=file:///home/whu/slam_ws/build/test_slam
-Build Type=Release
+Build Type=Debug
 CMake Binary=file:///usr/bin/cmake
 Environment Profile=
 Extra Arguments=-DCATKIN_DEVEL_PREFIX=/home/whu/slam_ws/devel -DCMAKE_INSTALL_PREFIX=/home/whu/slam_ws/install

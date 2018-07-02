@@ -1704,10 +1704,11 @@ def _import_module(module_name, warn=True, prefix='_py_', ignore='_'):
             globals()[attr] = getattr(module, attr)
         return True
 
-print "Hello World!"
+print "Hello World#!"
 R0 = euler_matrix(1, 2, 3, 'syxz')
 #print R0
 
+# vlp16 tf transform
 R=numpy.array(((0.734287,   -0.060771,   0.676113,    0.11453),
                 (0.0270035,   0.997811,  0.0603593,  0.0138586),
                 (-0.678301, -0.0260636,   0.734321,  -0.134201),
@@ -1723,7 +1724,38 @@ print q1
 al, be, ga = euler_from_matrix(R, 'sxyz')
 print 'srpy:euler_from_matrix-sxyz=',al, be, ga
 
+#hdl30lx tf
+#dataset1
+PI=3.14159262728
+R=numpy.array(((0.01196550552872411, -0.6113692088585728, 0.7912550266109437,    0.03253560139167337),
+                (0.04014185027972883, -0.7903800869836213, -0.6113002126254196, -0.1172873900636409),
+                (0.9991223441268654, 0.03907695688517882, 0.01508419394704152,  -0.1448743537651672),
+                (        0,          0,          0,          1)), dtype=numpy.float64)
+print R
 
+al, be, ga = euler_from_matrix(R, 'szyx')
+print 'srpy:euler_from_matrix-szyx(radian)=',al, be, ga
+print 'srpy:euler_from_matrix-szyx(angle)=',al*180/PI, be*180/PI, ga*180/PI
+
+R=numpy.array(((0.0002654476215566692, -0.05749583609507633, 0.9983457108483456,    0.05883632613548359),
+                (0.02643559402868886, -0.9979964392796437, -0.05748275005166929,    -0.02494451562246174),
+                (0.9996504833720188, 0.02640712057155141, 0.001255020800220885,  -0.1498008686599064),
+                (        0,          0,          0,          1)), dtype=numpy.float64)
+print R
+
+al, be, ga = euler_from_matrix(R, 'szyx')
+print 'srpy:euler_from_matrix-szyx(radian)=',al, be, ga
+print 'srpy:euler_from_matrix-szyx(angle)=',al*180/PI, be*180/PI, ga*180/PI
+
+R=numpy.array(((-0.0291865947002804, -0.08119201217232928, 0.9962710473807869,    0.0619486070340691),
+                (0.0059441728725022, -0.9966921337064563, -0.08105218946168743,  -0.01856993362877506),
+                (0.9995563063172895, 0.003556369930111623, 0.0295726687036667,  -0.2496312048293803),
+                (        0,          0,          0,          1)), dtype=numpy.float64)
+print R
+
+al, be, ga = euler_from_matrix(R, 'szyx')
+print 'srpy:euler_from_matrix-szyx(radian)=',al, be, ga
+print 'srpy:euler_from_matrix-szyx(angle)=',al*180/PI, be*180/PI, ga*180/PI
 
 
 
