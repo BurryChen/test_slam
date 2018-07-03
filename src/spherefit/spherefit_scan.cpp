@@ -95,8 +95,7 @@ int circle2dfit(std::string infile,std::string outfile, pcl::ModelCoefficients::
   else
   {
 	  //std::cerr << "PointCloud representing the cloud_filtered2 component: " << cloud_filtered2->points.size () << " data points." << std::endl;
-	  //writer.write ("cloud_filtered2.pcd", *cloud_filtered2, false);
-          
+	  //writer.write ("cloud_filtered2.pcd", *cloud_filtered2, false);          
 	  plywriter.write<PointT> (outfile+"_filtered2.ply", *cloud_filtered2,false,false);
   }
 
@@ -416,7 +415,6 @@ main (int argc, char** argv)
   
   //4、时间戳对应
   // 写文件 
-
   subdir=workdir+"/cp_all";
   mkdir(subdir.c_str(),777);
   outFile.open("cp_all.csv", ios::out);       
@@ -465,52 +463,52 @@ main (int argc, char** argv)
   }
   outFile.close();
 
-  //pre calculate Z sign in correspondences
-  //precalZsign(keypoints_v,keypoints_h,all_correspondences); 
-  Eigen::Matrix4f pose=Eigen::Matrix4f::Identity();
-  cout<<"all_correspondences.size()="<<all_correspondences.size()<<endl;
-  // Obtain the best transformation between the two sets of keypoints given the remaining correspondences
-  TransformationEstimationSVD<PointT, PointT> trans_est;
-  trans_est.estimateRigidTransformation (*keypoints_v, *keypoints_h, all_correspondences, pose);
-  cout<<" TransformationEstimationSVD with all_correspondences: "<<endl;
-  cout<<"pose = "<<pose<<endl;
-  pcl::registration::CorrespondenceRejectorSampleConsensus<PointT> rej;
-  rej.setInputSource(keypoints_v);
-  rej.setInputTarget(keypoints_h);
-  rej.setMaximumIterations(10000);
-  rej.setInlierThreshold(0.04);
-  rej.getRemainingCorrespondences(all_correspondences,good_correspondences); 
-  pose=rej.getBestTransformation();
-  cout<<"good_correspondences.size()="<<good_correspondences.size()<<endl;
-  cout<<" after rej.setInlierThreshold(0.01),rej.getBestTransformation() results: "<<endl;
+  //pre calculate Z sign in correspondences
+  //precalZsign(keypoints_v,keypoints_h,all_correspondences); 
+  Eigen::Matrix4f pose=Eigen::Matrix4f::Identity();
+  cout<<"all_correspondences.size()="<<all_correspondences.size()<<endl;
+
+  // Obtain the best transformation between the two sets of keypoints given the remaining correspondences
+  TransformationEstimationSVD<PointT, PointT> trans_est;
+  trans_est.estimateRigidTransformation (*keypoints_v, *keypoints_h, all_correspondences, pose);
+  cout<<" TransformationEstimationSVD with all_correspondences: "<<endl;
   cout<<"pose = "<<pose<<endl;
 
-  // 写文件 
-  subdir=workdir+"/cp_rej";
-  mkdir(subdir.c_str(),777);
-  outFile.open("cp_rej.csv", ios::out);    
-  outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
-  ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;    
-  for(pcl::Correspondences::iterator it = good_correspondences.begin(); it != good_correspondences.end(); it ++)
-  {
-    int j=it->index_query,i=it->index_match;
-    outFile << centers_h[i].stamp << ','  << centers_h[i].x<< ','<< centers_h[i].y << ',' << centers_h[i].z<< ',' 
-    << centers_h[i].r<< ',' << centers_h[i].rms
-    << ',' <<centers_v[j].stamp << ',' << centers_v[j].x<< ',' << centers_v[j].y << ',' << centers_v[j].z << ','
+  pcl::registration::CorrespondenceRejectorSampleConsensus<PointT> rej;
+  rej.setInputSource(keypoints_v);
+  rej.setInputTarget(keypoints_h);
+  rej.setMaximumIterations(10000);
+  rej.setInlierThreshold(0.04);
+  rej.getRemainingCorrespondences(all_correspondences,good_correspondences); 
+  pose=rej.getBestTransformation();
+  cout<<"good_correspondences.size()="<<good_correspondences.size()<<endl;
+  cout<<" after rej.setInlierThreshold(0.01),rej.getBestTransformation() results: "<<endl;
+  cout<<"pose = "<<pose<<endl;
+
+  // 写文件 
+  subdir=workdir+"/cp_rej";
+  mkdir(subdir.c_str(),777);
+  outFile.open("cp_rej.csv", ios::out);    
+  outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
+  ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;    
+  for(pcl::Correspondences::iterator it = good_correspondences.begin(); it != good_correspondences.end(); it ++)
+  {
+    int j=it->index_query,i=it->index_match;
+    outFile << centers_h[i].stamp << ','  << centers_h[i].x<< ','<< centers_h[i].y << ',' << centers_h[i].z<< ',' 
+    << centers_h[i].r<< ',' << centers_h[i].rms
+    << ',' <<centers_v[j].stamp << ',' << centers_v[j].x<< ',' << centers_v[j].y << ',' << centers_v[j].z << ','
     << centers_v[j].r<< ',' << centers_v[j].rms<< endl;
-  }
+  }
   outFile.close();
 
-    
-
-    //旋转矩阵转换为欧拉角
-  Eigen::Matrix3d Rotation=Eigen::Matrix3d::Identity();
-  Rotation  << pose(0,0),pose(1,1),pose(0,2),
-	  pose(1,0),pose(1,1),pose(1,2),
-	  pose(2,0),pose(2,1),pose(2,2);
-  Eigen::Vector3d euler_angles=Rotation.eulerAngles(2,1,0)*180/PI;
-  cout<<"Rotation = "<<Rotation<<endl;
-  cout<<"intrinsic rotations YPR around rotating Z-Y-X"<<euler_angles.transpose()<<endl;  
+  //旋转矩阵转换为欧拉角
+  Eigen::Matrix3d Rotation=Eigen::Matrix3d::Identity();
+  Rotation  << pose(0,0),pose(1,1),pose(0,2),
+	  pose(1,0),pose(1,1),pose(1,2),
+	  pose(2,0),pose(2,1),pose(2,2);
+  Eigen::Vector3d euler_angles=Rotation.eulerAngles(2,1,0)*180/PI;
+  cout<<"Rotation = "<<Rotation<<endl;
+  cout<<"intrinsic rotations YPR around rotating Z-Y-X"<<euler_angles.transpose()<<endl;
   cout<<"translations X-Y-Z "<<pose(0,3)<<" "<<pose(1,3)<< " "<<pose(2,3)<<endl; 
   
    //5.transform for validation
