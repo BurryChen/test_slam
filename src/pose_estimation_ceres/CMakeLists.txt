@@ -9,8 +9,15 @@ set( CMAKE_CXX_FLAGS "-std=c++11" )
 list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules )
 
 # 寻找Ceres库并添加它的头文件
-find_package( Ceres REQUIRED )
+find_package( Ceres REQUIRED)
 include_directories( ${CERES_INCLUDE_DIRS} )
+link_directories(${CERES_LIBRARY_DIRS})
+add_definitions(${CERES_DEFINITIONS})
+
+message(STATUS "CERES_INCLUDE_DIRS:" ${CERES_INCLUDE_DIRS})
+message(STATUS "CERES_LIBRARY_DIRS:" ${CERES_LIBRARY_DIRS})
+message(STATUS "CERES_DEFINITIONS:" ${CERES_DEFINITIONS})
+
 
 # OpenCV
 find_package( OpenCV REQUIRED )

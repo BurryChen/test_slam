@@ -7,7 +7,7 @@ set( CMAKE_BUILD_TYPE "Debug" )
 set( CMAKE_CXX_FLAGS "-std=c++11" )
 
 # 添加cmake模块以使用g2o
-list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/src/pose_estimation_g2o/cmake_modules )
+list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/src/pose_estimation/cmake_modules )
 
 #find_package( OpenCV 3.1 REQUIRED )
 find_package( OpenCV REQUIRED ) # use this if in OpenCV2 
@@ -46,14 +46,21 @@ include_directories(
 #   ${CSPARSE_LIBRARY}
 #)
 
-add_executable( pose_estimation_g2o pose_estimation_g2o.cpp )
-target_link_libraries( pose_estimation_g2o 
+add_executable( pose_estimation_3d3d_l2l pose_estimation_3d3d_l2l.cpp )
+target_link_libraries( pose_estimation_3d3d_l2l 
    ${OpenCV_LIBS}
    g2o_core g2o_stuff g2o_types_sba g2o_csparse_extension 
    ${CSPARSE_LIBRARY}
 )
 
-install(TARGETS  pose_estimation_g2o 
+add_executable( pose_estimation_2d3d_l2v pose_estimation_2d3d_l2v.cpp )
+target_link_libraries( pose_estimation_2d3d_l2v 
+   ${OpenCV_LIBS}
+   ${CSPARSE_LIBRARY}
+   g2o_core g2o_stuff g2o_types_sba g2o_csparse_extension
+)
+
+install(TARGETS  pose_estimation_3d3d_l2l pose_estimation_2d3d_l2v
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

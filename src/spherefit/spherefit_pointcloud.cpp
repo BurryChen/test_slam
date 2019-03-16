@@ -214,8 +214,8 @@ main (int argc, char** argv)
   string subdir;
    
   // experiment 2  yoga  
-  bag_dir.push_back("/media/whu/Research/04Research_PhD/02VLP16_Calibration/VLP16/_2018-05-22-21-56-22.bag");
-  bag_dir.push_back("/media/whu/Research/04Research_PhD/02VLP16_Calibration/VLP16/_2018-05-22-21-58-35.bag");
+  bag_dir.push_back("/media/whu/HD_CHEN_2T/02data/WHUKylinBackpack/VLP16_Calibration/_2018-05-22-21-56-22.bag");
+  bag_dir.push_back("/media/whu/HD_CHEN_2T/02data/WHUKylinBackpack/VLP16_Calibration/_2018-05-22-21-58-35.bag");
   double threshold[4][4]={
        -1,1,-4,0,
        -1,1,-4,0,

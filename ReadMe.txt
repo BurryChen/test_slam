@@ -82,6 +82,37 @@ find_package(PCL 1.8 REQUIRED PATHS /home/whu/slam_ws/install/share/pcl-1.8)
 lib example 不再加入工程中， build 及debug 全在下载source中进行，debug 使用gdb工具
 cmake -DCMAKE_BUILD_TYPE=Debug .. 
 cmakelist中#set( CMAKE_CXX_FLAGS "-std=c++11 -O3" )  不能为O3,优化层度太高，无debug信息
--------------------------------------------------------   2018.5.20
-gdb run（简写r）：执行程序
-(gdb)run app [argv1] [argv2] ...
+-------------------------------------------------------   2018.8.12)
+1 启动gdb的两种方式
+1）gdb app
+break  1
+run [argv1] [argv2]
+2) (gdb)file app 
+    break 1
+    run [argv1] [argv2] ...
+
+-------------------------------------------------------   2018.05.10
+ceres lib的使用：
+
+1） # 寻找Ceres库并添加它的头文件
+find_package( Ceres REQUIRED)
+include_directories( ${CERES_INCLUDE_DIRS} )
+link_directories(${CERES_LIBRARY_DIRS})
+add_definitions(${CERES_DEFINITIONS})
+
+2） ndt_omp依赖于ceres，链接器从左往右扫描目标问题和库，先扫描main.o，把未定义的符号放入集合，然后扫描libceres.a
+（此时libceres.a的函数没有被用到，跳过），最后扫描libndt_omp.so（发现要调用ceres，
+但是已经被略过了，就出现了未定义引用的问题），，
+总之关键是从左往右扫描，尽量填补未定义符号集合，否则跳过
+
+target_link_libraries(match
+  ndt_omp
+  ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
+  ${CERES_LIBRARIES}
+  ${Sophus_LIBRARIES}
+)
+
+-------------------------------------------------------   2019.3.15
+lidar2visual calibartion
+pose_estimation_2d3d_l2v.cpp

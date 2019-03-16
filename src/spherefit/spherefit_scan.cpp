@@ -158,7 +158,8 @@ int circle2dfit(std::string infile,std::string outfile, pcl::ModelCoefficients::
 int transform(std::string infile,std::string outfile)
 {
   // All the objects needed
-  pcl::PCDReader reader;
+  //pcl::PCDReader reader;
+  pcl::PLYReader reader;
   pcl::PLYWriter plywriter;
   // Datasets
   pcl::PointCloud<PointT>::Ptr cloud (new pcl::PointCloud<PointT>);
@@ -177,12 +178,18 @@ int transform(std::string infile,std::string outfile)
     This is the "manual" method, perfect to understand but error prone !
   */
   Eigen::Matrix4f transform= Eigen::Matrix4f::Identity();
+  //dataset1_linuxdata20180408
+/*  transform  <<   
+0.01196550552872411, -0.6113692088585728, 0.7912550266109437,   0.03253560139167337,
+0.04014185027972883, -0.7903800869836213, -0.6113002126254196,   -0.1172873900636409,
+0.9991223441268654, 0.03907695688517882, 0.01508419394704152,    -0.1448743537651672,
+          0,           0,           0,           1;*/
+// dataset9_angle90_0_20180621
   transform  <<   
--0.00112908,   -0.609369,    0.792886,   0.0341578,
-  0.0466361,   -0.792055,   -0.608665,   -0.117896,
-   0.998911,   0.0362899,   0.0293129,     -0.1441,
+  -0.02094681801281828, -0.07978796441100858, 0.9965917476832153, 0.05958551769557144,
+ 0.002419209174023197, -0.9968115833032846, -0.07975471659639455, -0.01636101075184244,
+ 0.9997776644044967, 0.0007403563645424632, 0.02107305460400311, -0.249424483979713,
           0,           0,           0,           1;
-	 
   // Print the transformation 
   printf ("Method: using a Matrix4f\n");
   //std::cout << transform << std::endl;
@@ -348,7 +355,7 @@ main (int argc, char** argv)
     //清空子路径
     subdir=workdir+"/circle2d";
     //if(access(subdir.c_str(),F_OK)!=-1) rmdir(subdir.c_str());
-    mkdir(subdir.c_str(),777);
+    mkdir(subdir.c_str(),0777);
     // 写文件     
     outFile.open("data_v.csv", ios::out);   
     outFile << "stamp" << ',' << "x" << ',' << "y" << ',' << "z" << ',' <<"r" << ',' << "rms" <<endl;  
@@ -416,7 +423,7 @@ main (int argc, char** argv)
   //4、时间戳对应
   // 写文件 
   subdir=workdir+"/cp_all";
-  mkdir(subdir.c_str(),777);
+  mkdir(subdir.c_str(),0777);
   outFile.open("cp_all.csv", ios::out);       
   outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
   ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;  
@@ -440,7 +447,7 @@ main (int argc, char** argv)
   //precalZsign(keypoints_v,keypoints_h,all_correspondences);
   // 写文件 
   subdir=workdir+"/cp_r_R";
-  mkdir(subdir.c_str(),777);
+  mkdir(subdir.c_str(),0777);
   outFile.open("cp_r_R.csv", ios::out);   
   outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
   ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;  
@@ -487,7 +494,7 @@ main (int argc, char** argv)
 
   // 写文件 
   subdir=workdir+"/cp_rej";
-  mkdir(subdir.c_str(),777);
+  mkdir(subdir.c_str(),0777);
   outFile.open("cp_rej.csv", ios::out);    
   outFile << "stamp1" << ',' << "x1" << ',' << "y1" << ',' << "z1" << ',' <<"r1" << ',' << "rms1" <<
   ',' << "stamp2" << ',' << "x2" << ',' << "y2" << ',' <<"z2" << ',' << "r2" << ',' << "rms2" <<endl;    
@@ -512,20 +519,20 @@ main (int argc, char** argv)
   cout<<"translations X-Y-Z "<<pose(0,3)<<" "<<pose(1,3)<< " "<<pose(2,3)<<endl; 
   
    //5.transform for validation
-   /*bag_dir[0]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/validation.bag";
-   workdir=bag_dir[0]+"_scan_ver";
+   //bag_dir[0]="/media/whu/Research/04Research_PhD/01LRF_Calibation/data/linuxdata20180408/validation.bag";
+   workdir=bag_dir[1]+"_scan_ver/circle2d";
    //threshold[0]=-0.2,threshold[1]=0.5,threshold[2]=-1.5,threshold[3]=0;
    chdir(workdir.c_str());
    pdir = opendir(workdir.c_str()); 
    //清空子路径
    subdir=workdir+"/transform";
-   mkdir(subdir.c_str(),777);
+   mkdir(subdir.c_str(),0777);
   
     while((p = readdir(pdir)) != NULL)
     {
 	//这里需要注意，linux平台下一个目录中有"."和".."隐藏文件，需要过滤掉
 	//d_name是一个char数组，存放当前遍历到的文件名
-	if(p->d_name[0] == 'v'&& strncmp(p->d_name + 18,".pcd", 5)==0)
+	if(p->d_name[0] == 'v'&& strncmp(p->d_name + 18,".pcd_circle2d.ply", 5)==0)
 	{
 	  string temp1 =string(p->d_name);
 	  string temp3= workdir+"/transform/"+string(p->d_name);	
@@ -534,7 +541,7 @@ main (int argc, char** argv)
 	  transform(temp1,temp3);
 	}
     }   
-    closedir(pdir); */
+    closedir(pdir); 
    
   return (0);
 }
