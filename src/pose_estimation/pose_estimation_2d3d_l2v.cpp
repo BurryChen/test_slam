@@ -25,6 +25,9 @@ void find_feature_matches (
 // 像素坐标转相机归一化坐标
 Point2d pixel2cam ( const Point2d& p, const Mat& K );
 
+// 世界坐标转像素坐标
+Point2d world2pixel ( const Point3d& p, const Mat& K, const Mat& R, const Mat& t);
+
 void bundleAdjustment (
     const vector<Point3f> points_3d,
     const vector<Point2f> points_2d,
@@ -34,9 +37,9 @@ void bundleAdjustment (
 
 int main ( int argc, char** argv )
 {
-    if ( argc != 5 )
+    /*if ( argc != 2 )
     {
-        cout<<"usage: pose_estimation_3d2d img1 img2 depth1 depth2"<<endl;
+        cout<<"usage: pose_estimation_2d3d corresponces"<<endl;
         return 1;
     }
     //-- 读取图像
@@ -65,7 +68,48 @@ int main ( int argc, char** argv )
     }
 
     cout<<"3d-2d pairs: "<<pts_3d.size() <<endl;
+       
+    ofstream outFile;  
+    outFile.open("cor_2d3d.csv", ios::out);   
+    outFile  << "id"<<','<<"x" << ',' << "y" << ',' << "X" << ',' <<  "Y" << ',' << "Z" <<endl;
+    for ( int i=0; i<pts_2d.size(); i++ )
+    {
+      //cout <<"corresponding-"<<i<< ":\t"<< pts_2d[i] << "\t" << pts_3d[i]  << endl; 
+      outFile << i << ','  << pts_2d[i].x<< ','<< pts_2d[i].y << ',' << pts_3d[i].x<< ',' << pts_3d[i].y<< ',' << pts_3d[i].z  << endl;  
+    }*/
+    
+    string workdir="/media/whu/Research/04SLAM_DoctoralDissertation/05InfraredCamera-LiDAR/01data/LiDAR_camera_calib";
+    chdir(workdir.c_str());
+   
+    ifstream inFile; 
+    inFile.open("corresponces_2d3d_01.csv",ios::in);
+    string line; 
+    //整行读取，换行符“\n”区分，遇到文件尾标志eof终止读取 ,第一行跳过
+    getline(inFile, line);
+    int id=0;
+    vector<Point3f> pts_3d;
+    vector<Point2f> pts_2d;
+    while (getline(inFile, line))   
+    {  
+        cout <<"原始字符串："<< line << endl; //整行输出  
+        istringstream sin(line); //将整行字符串line读入到字符串流istringstream中  
+        vector<string> fields; //声明一个字符串向量  
+        string field;  
+        while (getline(sin, field, ',')) //将字符串流sin中的字符读入到field字符串中，以逗号为分隔符  
+        {  
+            fields.push_back(field); //将刚刚读取的字符串添加到向量fields中  
+        }  
+        float x=stof(fields[1].c_str()),y = atof(fields[2].c_str());
+	float X=stof(fields[3].c_str()),Y = atof(fields[4].c_str()),Z = atof(fields[5].c_str());
 
+	Point2f p1(x,y);
+        Point3f p2(X,Y,Z);
+        pts_2d.push_back ( p1);
+        pts_3d.push_back ( p2); 
+        cout <<"correspondence-"<<id++<<":\t"<< p1 << "\t" << p2  << endl; 
+    }
+    Mat K = ( Mat_<double> ( 3,3 ) << 2603.42438406452, 1.28877447628778, 1954.85741239866, 0, 2613.39945791598, 1463.05724922524, 0, 0, 1 );
+    
     Mat r, t;
     solvePnP ( pts_3d, pts_2d, K, Mat(), r, t, false ); // 调用OpenCV 的 PnP 求解，可选择EPNP，DLS等方法
     Mat R;
@@ -76,7 +120,40 @@ int main ( int argc, char** argv )
 
     cout<<"calling bundle adjustment"<<endl;
 
-    bundleAdjustment ( pts_3d, pts_2d, K, R, t );
+    //bundleAdjustment ( pts_3d, pts_2d, K, R, t );
+    
+    ofstream outFile;
+    outFile.open("result.log", ios::out);  
+    outFile<<" G2O bundleAdjustment results: "<<endl;
+    outFile<<"R = "<<R<<endl;
+    outFile<<"t = "<<t<<endl;
+    outFile<<"R_inv = "<<R.t() <<endl;
+    outFile<<"t_inv = "<<-R.t() *t<<endl;
+    
+    //2.Validation_residual: // verify pts_2d = R*p2 + t
+    ofstream resFile;
+    resFile.open("residual.csv", ios::out);     
+    for ( int i=0; i<pts_2d.size(); i++ )
+    {
+        Point2d pts_3d2pixel=world2pixel(pts_3d[i],K,R,t);
+	Point2d error_proj(pts_2d[i].x-pts_3d2pixel.x ,pts_2d[i].y-pts_3d2pixel.y);
+        
+	cout<<"pts_2d = "<<pts_2d[i]<<endl;
+        cout<<"pts_3d = "<<pts_3d[i]<<endl;
+        cout<<"pts_3d2pixel = "<< pts_3d2pixel <<endl;	    
+	cout<<"error_proj = "<< error_proj<<endl;
+        cout<<endl;
+	
+	outFile<<"pts_2d = "<<pts_2d[i]<<endl;
+        outFile<<"pts_3d = "<<pts_3d[i]<<endl;
+        outFile<<"pts_3d2pixel = "<< pts_3d2pixel <<endl;	    
+	outFile<<"error_proj = "<< error_proj<<endl;
+        outFile<<endl;
+	
+	resFile<<
+	//pts_2d[i]<<pts_3d[i]<<pts_3d2pixel<< 
+	error_proj.x<<","<<error_proj.y<<","<<norm(error_proj)<<endl;
+    }
 }
 
 void find_feature_matches ( const Mat& img_1, const Mat& img_2,
@@ -137,6 +214,13 @@ Point2d pixel2cam ( const Point2d& p, const Mat& K )
                ( p.x - K.at<double> ( 0,2 ) ) / K.at<double> ( 0,0 ),
                ( p.y - K.at<double> ( 1,2 ) ) / K.at<double> ( 1,1 )
            );
+}
+
+// 世界坐标转像素坐标
+Point2d world2pixel ( const Point3d& p, const Mat& K, const Mat& R, const Mat& t)
+{
+  Mat KTP=K*(R * (Mat_<double>(3,1)<<p.x, p.y, p.z) + t);
+  return Point2d(KTP.at<double>(0,0) / KTP.at<double>(0,2),KTP.at<double>(0,1) / KTP.at<double>(0,2));
 }
 
 void bundleAdjustment (
