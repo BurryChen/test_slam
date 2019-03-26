@@ -78,11 +78,11 @@ int main ( int argc, char** argv )
       outFile << i << ','  << pts_2d[i].x<< ','<< pts_2d[i].y << ',' << pts_3d[i].x<< ',' << pts_3d[i].y<< ',' << pts_3d[i].z  << endl;  
     }*/
     
-    string workdir="/media/whu/Research/04SLAM_DoctoralDissertation/05InfraredCamera-LiDAR/01data/LiDAR_camera_calib";
+    string workdir="/media/whu/Research/04SLAM_DoctoralDissertation/05InfraredCamera-LiDAR/01data/l2v_calib01/vlp16_2_imu_2019-03-04-18-54-21.bag_pcd_hori/break_extract";
     chdir(workdir.c_str());
    
     ifstream inFile; 
-    inFile.open("corresponces_2d3d_01.csv",ios::in);
+    inFile.open("corresponces_2d3d.csv",ios::in);
     string line; 
     //整行读取，换行符“\n”区分，遇到文件尾标志eof终止读取 ,第一行跳过
     getline(inFile, line);
