@@ -121,7 +121,8 @@ lineWithLineIntersection (const pcl::ModelCoefficients &line_a,
 int
 main (int argc, char** argv)
 {
-  string workdir="/media/whu/Research/04SLAM_DoctoralDissertation/05InfraredCamera-LiDAR/01data/l2v_calib01/vlp16_2_imu_2019-03-04-18-54-21.bag_pcd_hori/break_extract";
+  //string workdir="/media/whu/Research/04SLAM_DoctoralDissertation/05InfraredCamera-LiDAR/01data/l2v_calib03_20190404/3D_VLP16/vlp16_2_imu_2019-04-04-13-51-51.bag_pcd_hori/break_extract";
+  string workdir=argv[1];
   chdir(workdir.c_str());
   opendir(workdir.c_str());
    
@@ -164,10 +165,10 @@ main (int argc, char** argv)
     //d_name是一个char数组，存放当前遍历到的文件名
     p=namelist[index];
     //printf("%s\n", namelist[index]->d_name);
-    if(p->d_name[0] == 'b'&& strncmp(p->d_name + 14,".pcd", 5)==0)
+    if(p->d_name[0] == 'b'&& strncmp(p->d_name + 15,".pcd", 5)==0)
     {
   std::string input_pcd =string(namelist[index]->d_name);
-  strncpy(tmp, p->d_name+11, 3); tmp[3] = '\0';break_id=atol(tmp);
+  strncpy(tmp, p->d_name+11, 4); tmp[4] = '\0';break_id=atol(tmp);
   pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_src(new pcl::PointCloud<pcl::PointXYZI>());
   pcl::PointCloud<pcl::PointXYZI>::Ptr cloud_temp(new pcl::PointCloud<pcl::PointXYZI>());
 
@@ -187,7 +188,7 @@ main (int argc, char** argv)
   seg.setModelType (pcl::SACMODEL_LINE);                    //设置分割模型为直线
   seg.setMethodType (pcl::SAC_RANSAC);                      //参数估计方法
   //seg.setMaxIterations (100);                             //最大迭代次数
-  seg.setDistanceThreshold (0.015);                         //内点到模型的距离  
+  seg.setDistanceThreshold (0.005);                         //内点到模型的距离  
   
   pcl::ExtractIndices<pcl::PointXYZI> extract;
   std::string ss;
@@ -239,11 +240,13 @@ main (int argc, char** argv)
   //outFile << "id"<< ',' <<"u" << ',' << "v"  << ',' << "X" << ',' << "X" << ',' << "Z" <<endl; 
   for(int i=0;i<breaks_2d.size();i++)
   {
-    if(breaks_2d[i][2]==breaks_3d[i][3])
-    {
-      std::cout<<i<<","<<breaks_2d[i][0]<<","<<breaks_2d[i][1]<<","<<breaks_3d[i][0]<<","<<breaks_3d[i][1]<<","<<breaks_3d[i][2]<<","<<breaks_3d[i][3]<< std::endl;
-      outFile  <<i<<","<<breaks_2d[i][0]<<","<<breaks_2d[i][1]<<","<<breaks_3d[i][0]<<","<<breaks_3d[i][1]<<","<<breaks_3d[i][2]<<","<<breaks_3d[i][3]<< std::endl;
-    } 
+      for(int j=0;j<breaks_3d.size();j++)
+      {
+	if(breaks_2d[i][2]==breaks_3d[j][3]){
+          std::cout<<i<<","<<breaks_2d[i][0]<<","<<breaks_2d[i][1]<<","<<breaks_3d[j][0]<<","<<breaks_3d[j][1]<<","<<breaks_3d[j][2]<<","<<breaks_3d[j][3]<< std::endl;
+          outFile  <<i<<","<<breaks_2d[i][0]<<","<<breaks_2d[i][1]<<","<<breaks_3d[j][0]<<","<<breaks_3d[j][1]<<","<<breaks_3d[j][2]<<","<<breaks_3d[j][3]<< std::endl;	  
+	}
+      }
   }
   outFile.close();
   
