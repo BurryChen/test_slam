@@ -80,7 +80,7 @@ int main ( int argc, char** argv )
 	
         //cout <<"correspondence-"<<id++<<":\t"<< p1 << "\t" << p2  << endl; 
     }
-    Mat K = ( Mat_<double> ( 3,3 ) << 2830.65904835220, 0, 1992.17544224541, 0, 2820.98640659019, 1474.38425442778, 0, 0, 1);
+    Mat K = ( Mat_<double> ( 3,3 ) << 2814.26885863355, 0, 2003.80380836663, 0, 2804.58176740019, 1450.29021239786, 0, 0, 1);
     
     Mat r, t;
     solvePnP ( pts_3d, pts_2d, K, Mat(), r, t, false ); // 调用OpenCV 的 PnP 求解，可选择EPNP，DLS等方法
@@ -176,6 +176,11 @@ int main ( int argc, char** argv )
     for ( int i=0; i<6; i++ )
     {
       outFile<<sigma*sqrt(Cov(i,i))<<endl;
+    }
+    outFile<<"sigma_angle=\n";
+    for ( int i=0; i<3; i++ )
+    {
+      outFile<<sigma*sqrt(Cov(i,i))*180/3.1415926<<endl;
     }
     
     outFile<<"-----------------------residual_check----------------------------"<<endl;
@@ -443,7 +448,7 @@ struct CORRESPONDING_2D3D_COST
         return true;
     }
     const double _u,_v,_x,_y,_z; 
-    const double K[9]={2830.65904835220, 0, 1992.17544224541, 0, 2820.98640659019, 1474.38425442778, 0, 0, 1};
+    const double K[9]={2814.26885863355, 0, 2003.80380836663, 0, 2804.58176740019, 1450.29021239786, 0, 0, 1};
 };
 
 

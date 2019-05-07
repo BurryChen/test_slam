@@ -1758,4 +1758,14 @@ print 'srpy:euler_from_matrix-szyx(radian)=',al, be, ga
 print 'srpy:euler_from_matrix-szyx(angle)=',al*180/PI, be*180/PI, ga*180/PI
 
 
+#vlp16-camera tf
+R=numpy.array(((0.1827531382603889, -0.9831579006605875, 0.001353818542430829,    -0.002500026675739767),
+                (-0.01214701482089608, -0.003634833014509065, -0.9999196157791375, -0.08234497041929258),
+                (0.9830837911830916, 0.1827220029378598, -0.01260671073105923,  -0.1058863651228758),
+                (        0,          0,          0,          1)), dtype=numpy.float64)
+print R
+
+al, be, ga = euler_from_matrix(R, 'szyx')
+print 'srpy:euler_from_matrix-szyx(radian)=',al, be, ga
+print 'srpy:euler_from_matrix-szyx(angle)=',al*180/PI, be*180/PI, ga*180/PI
 

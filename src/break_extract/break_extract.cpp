@@ -89,7 +89,7 @@ lineToLineSegment (const Eigen::VectorXf &line_a, const Eigen::VectorXf &line_b,
   pt2_seg = q1 + tc * v;
 }
 
-bool
+double 
 lineWithLineIntersection (const Eigen::VectorXf &line_a, 
                                const Eigen::VectorXf &line_b, 
                                Eigen::Vector4f &point, double sqr_eps)
@@ -102,13 +102,13 @@ lineWithLineIntersection (const Eigen::VectorXf &line_a,
   if (sqr_dist < sqr_eps)
   {
     point = p1;
-    return (true);
+    return sqr_dist;
   }
   point.setZero ();
-  return (false);
+  return sqr_dist;
 }
 
-bool
+double 
 lineWithLineIntersection (const pcl::ModelCoefficients &line_a, 
                                const pcl::ModelCoefficients &line_b, 
                                Eigen::Vector4f &point, double sqr_eps)
@@ -121,8 +121,8 @@ lineWithLineIntersection (const pcl::ModelCoefficients &line_a,
 int
 main (int argc, char** argv)
 {
-  //string workdir="/media/whu/Research/04SLAM_DoctoralDissertation/05InfraredCamera-LiDAR/01data/l2v_calib03_20190404/3D_VLP16/vlp16_2_imu_2019-04-04-13-51-51.bag_pcd_hori/break_extract";
-  string workdir=argv[1];
+  string workdir="/media/whu/Research/04Dissertation/05Lidar2Camera_Calib/01data/l2v_calib03_20190415_vlp16/train/cps";
+  //string workdir=argv[1];
   chdir(workdir.c_str());
   opendir(workdir.c_str());
    
@@ -148,7 +148,8 @@ main (int argc, char** argv)
    inFile.close();
   
   //2. break_3d extract
-  vector<Eigen::Vector4f> breaks_3d;
+  vector<Eigen::Vector4f> breaks_3d,precisons;
+  Eigen::Vector4f precison;
   ofstream outFile;
 
   char * tmp = new char[100];
@@ -206,6 +207,24 @@ main (int argc, char** argv)
   ss = "line_"+string(tmp)+"_L1.pcd";
   //std::cout << ss <<" "<<cloud_line->points.size()<<coefficients1<< std::endl;
   //pcl::io::savePCDFileASCII (ss, *cloud_line);
+  // ransac precision-RMS
+  vector<double> residual;
+  for (size_t i = 0; i < cloud_line->points.size (); ++i)
+    {
+      Vector3d v1,a,d;
+      v1<<cloud_line->points[i].x -coefficients1.values[0],
+      cloud_line->points[i].y -coefficients1.values[1],
+      cloud_line->points[i].z -coefficients1.values[2];
+      a<<coefficients1.values[3],coefficients1.values[4],coefficients1.values[5];
+      d=v1.cross(a);
+      residual.push_back(d.norm());
+    } 
+  double accum  = 0.0;  
+  for (vector<int>::size_type ix = 0; ix != residual.size(); ix ++){
+      accum  += residual[ix]*residual[ix];   
+    }
+  precison[0]= sqrt(accum/(residual.size()-1)); //RMS  
+
     
   //Line2
   seg.setInputCloud (cloud_src);
@@ -220,14 +239,35 @@ main (int argc, char** argv)
   ss ="line_"+string(tmp)+"_L2.pcd";
   //std::cout << ss <<" "<<cloud_line->points.size()<<coefficients2<< std::endl;
   //pcl::io::savePCDFileASCII (ss, *cloud_line);
+    // ransac precision-RMS
+  residual.clear();
+  for (size_t i = 0; i < cloud_line->points.size (); ++i)
+    {
+      Vector3d v1,a,d;
+      v1<<cloud_line->points[i].x -coefficients2.values[0],
+      cloud_line->points[i].y -coefficients2.values[1],
+      cloud_line->points[i].z -coefficients2.values[2];
+      a<<coefficients2.values[3],coefficients2.values[4],coefficients2.values[5];
+      d=v1.cross(a);
+      residual.push_back(d.norm());
+    } 
+  accum  = 0.0;  
+  for (vector<int>::size_type ix = 0; ix != residual.size(); ix ++){
+      accum  += residual[ix]*residual[ix];   
+    }
+  precison[1]= sqrt(accum/(residual.size()-1)); //RMS  
   
   //2.lineWithLineIntersection
   Eigen::Vector4f break_3d;
   double sqr_eps=1e-6;
-  lineWithLineIntersection(coefficients1,coefficients2,break_3d,sqr_eps);
+  precison[2]=lineWithLineIntersection(coefficients1,coefficients2,break_3d,sqr_eps);
   break_3d[3]=break_id;
-  //std::cout<<break_id<<","<<break_3d[0]<<","<<break_3d[1]<<","<<break_3d[2]<< std::endl;
-  breaks_3d.push_back(break_3d);
+  precison[3]=break_id;
+  std::cout<<break_id<<","<<break_3d[0]<<","<<break_3d[1]<<","<<break_3d[2]<< std::endl;
+  if(break_3d[0]!=0){
+    breaks_3d.push_back(break_3d);
+    precisons.push_back(precison);
+  }
 
 	}
 	free(namelist[index]);
@@ -243,8 +283,9 @@ main (int argc, char** argv)
       for(int j=0;j<breaks_3d.size();j++)
       {
 	if(breaks_2d[i][2]==breaks_3d[j][3]){
-          std::cout<<i<<","<<breaks_2d[i][0]<<","<<breaks_2d[i][1]<<","<<breaks_3d[j][0]<<","<<breaks_3d[j][1]<<","<<breaks_3d[j][2]<<","<<breaks_3d[j][3]<< std::endl;
-          outFile  <<i<<","<<breaks_2d[i][0]<<","<<breaks_2d[i][1]<<","<<breaks_3d[j][0]<<","<<breaks_3d[j][1]<<","<<breaks_3d[j][2]<<","<<breaks_3d[j][3]<< std::endl;	  
+          //std::cout<<i<<","<<breaks_2d[i][0]<<","<<breaks_2d[i][1]<<","<<breaks_3d[j][0]<<","<<breaks_3d[j][1]<<","<<breaks_3d[j][2]<<","<<breaks_3d[j][3]<< std::endl;
+          outFile  <<i<<","<<breaks_2d[i][0]<<","<<breaks_2d[i][1]<<","<<breaks_3d[j][0]<<","<<breaks_3d[j][1]<<","<<breaks_3d[j][2]<<","<<breaks_3d[j][3]
+          <<","<<precisons[j][0]<<","<<precisons[j][1]<<","<<precisons[j][2]<<","<<precisons[j][3]<< std::endl;;	  
 	}
       }
   }
